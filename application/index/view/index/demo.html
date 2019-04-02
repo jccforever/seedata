@@ -1,0 +1,53 @@
+<style> 
+    *{margin: 0;padding: 0;}
+    .print_paper {font-size: 9pt;border: none;border-collapse: collapse;width: 375px;margin-top: -1px;table-layout: fixed;}
+    .print_paper td {border-top:  dashed #000 1px;}
+    .f32 { font-size: 32pt;}
+	.f16 {font-size: 16pt;}
+	.f14 {font-size: 14pt;}
+	.f12 {font-size: 12pt;}
+	.f10 {font-size: 10pt;}
+	.f8 {font-size: 8pt;}
+	.b {font-weight: bold;}
+	.n {font-weight: normal;}
+	.tc {text-align: center;}
+	.tr {text-align: right;}
+	.vt {vertical-align: top;    }
+	.bor-no td { border: none;    }
+	.print_paper .bln { border-left: none;    }
+	.print_paper .brn { border-right: none;   }
+	.lh10 { line-height: 10px;    }
+	.lh14 {line-height: 14px;    }
+	.pp-bn td {border: none;   }
+	.t-bn td {border: none;   }
+	.pt5 {padding-top: 5px;    }
+	.pl5 {padding-left: 5px;     }
+	.pl15 { padding-left: 15px;    }
+	.pr10 {padding-right: 10px;    }
+	.rel {position: relative;    }
+	.abs {position: absolute;   }
+	.d {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
+	.r {float: right; }
+	.fhei {font-family: 'SimHei';  }
+	.fam {font-family: "Microsoft YaHei";  }
+</style>    
+ <script language="javascript"> 
+
+function preview() { 
+bdhtml=window.document.body.innerHTML; 
+sprnstr='<!--startprint-->'; 
+eprnstr='<!--endprint-->'; 
+prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+1); 
+prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr)); 
+window.document.body.innerHTML=prnhtml; 
+window.print(); 
+} 
+</script>
+<!--startprint-->
+<table class="print_paper"><tbody><tr height="53"><td class="brn"></td><td class="bln tr f12 pr10">标准快递</td></tr></tbody></table>
+<table class="print_paper "> <tbody><tr height="67"><td class="tc fam f32 b">{$row.position} {$row.position_no}</td></tr></tbody></table>
+<table class="print_paper "> <tbody><tr height="67"><td class="brn tc f12 b" width="37">集</td><td class="bln f12 b"> {$row.package_wdjc} </td></tr>    </tbody></table>
+<table class="print_paper "><tbody><tr height="77"><td class="brn tc f12 b" width="37">收</td><td class="bln"><div class="b f10" style="height: 61px;overflow: hidden">{$row.receiver_name} {$row.sender_mobile}<br>{$row.receiver_address}</div></td> </tr></tbody></table>
+<table class="print_paper "><tbody><tr height="60"><td class="brn tc f12 b" width="37">寄</td><td class="bln"><div class="f8" style="height: 43px;overflow: hidden"> {$row.sender_name}  {$row.receiver_name} <br>{$row.sender_address} </div></td></tr></tbody></table>
+<table class="print_paper "><tbody><tr height="95"><td class="tc b f12 fam lh14"><img class="" width="270" height="75" src="/code/code.php?text={$row.mailno}" alt="">    </td>        </tr>    </tbody></table>    <table class="print_paper ">        <tbody><tr height="92">            <td class="f8 pl5" width="64" style="letter-spacing: -1px;">                                <br><span class="f12 b"></span>                                      </td>            <td class="f8 vt pt5 rel">                              <div class="abs b" style="top: 55px;right: 25px;overflow: hidden">             签收栏 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAMCAIAAAA21aCOAAABRElEQVQYGT2RPYrCUBSFX37AxsImXVYgQVC0NEUiCDaprCxt0gVcgkQ3YKcgadKmyAZSSBaQDQRXoI0g+DMzX+Y6cyHvnXfueefed6O+f+PrL57PpzBVVd1uNzDM4/FQwsr6er0ExHHs+/5gMCiKAub9fiuM2AiAiEgrpRaLxXa77Xa7l8sFXufTNE1W0lEU3e/3/X6fpqlt271eL89z+E9dMVuv19PplDvH4zEIAsdxWq3W6XSCaeqyEbvdznVdjkjn8zkMLsvlEgCp6AyUZRksutlsliQJDJ2FYQiQaOrWdW2aJml6Gg6H5/O53+9PJhNRMITGjwPd8BR512q1wng0Gv2LZBSNjvbJjcfjw+FgWRZO1+sVXsaJGbjReZ6Hrt1uM9vNZgND8BvESXQa57IsDcNgCp1OhwsETnSMDqzrOl39ACTANe4hz/18AAAAAElFTkSuQmCC" alt="">                 </div>            </td>            <td class="tc" width="75">                         </td>        </tr>    </tbody></table>    <table class="print_paper ">        <tbody><tr height="48">            <td class="brn" width="190">                           </td>            <td class="lh10 bln fam f8 b tc">                <img width="176" height="35" src="/code/code.php?text={$row.mailno}" alt="">           </td>        </tr>    </tbody></table>                   <table class="print_paper ">        <tbody><tr height="50">            <td class="brn tc" width="37">                <img width="28" height="35" src="data:image/png;base64,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" alt="">            </td>            <td class="bln">                <div class="f8" style="height: 43px;overflow: hidden">{$row.receiver_name} {$row.sender_mobile}<br> {$row.receiver_address}                </div>            </td>        </tr>    </tbody></table>    <table class="print_paper ">        <tbody><tr height="55">            <td class="brn tc f12 b" width="37">                寄            </td>            <td class="bln">                <div class="f8" style="height: 50px;overflow: hidden"> {$row.sender_name}  {$row.receiver_name} <br>{$row.sender_address}</div>            </td>        </tr>    </tbody></table><table class="print_paper ">    <tr height="32">      <td class="vt rel" >    轻拿慢放     <div class="abs f8" style="top: 35px;right: 5px;">已检视</div>      </td>      </tr>     </table><!--endprint-->
+<input type="button" name="print" value="预览并打印" onclick="preview()"> 

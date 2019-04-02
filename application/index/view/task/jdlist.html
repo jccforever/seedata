@@ -1,0 +1,47 @@
+{eq name="ids" value="88"}
+<script language="javascript" type="text/javascript">
+	// 以下方式直接跳转
+	window.location.href='/task/jdlist.html?task_tpe=6';
+</script>
+{/eq}
+<style>
+.columns-right{
+  margin-top: 0px!important;
+} 
+.pull-right { 
+    margin-top: 0px!important;
+} 
+</style>
+{include file="common/sidenav" /}
+<div class="tpl-content-wrapper">
+	<div class="row-content am-cf">
+		<div class="row am-cf">
+			<div class="am-u-sm-12 am-u-md-12">
+				<div class="am-tabs">
+					<ul class="am-tabs-nav am-nav am-nav-tabs">
+						{in name="$ids" value="6"}<li class="am-active"><a href="javascript: void(0)">京东流量</a></li>{else/}<li><a href="/task/jdlist.html?task_tpe=6">京东流量</a></li>{/in}
+						{in name="$ids" value="7"}<li class="am-active"><a href="javascript: void(0)">商品收藏</a></li>{else/}<li><a href="/task/jdlist.html?task_tpe=7">商品收藏</a></li>{/in}
+						{in name="$ids" value="8"}<li class="am-active"><a href="javascript: void(0)">商品加购</a></li>{else/}<li><a href="/task/jdlist.html?task_tpe=8">商品加购</a></li>{/in}
+						{in name="$ids" value="9"}<li class="am-active"><a href="javascript: void(0)">店铺关注</a></li>{else/}<li><a href="/task/jdlist.html?task_tpe=9">店铺关注</a></li>{/in}
+					</ul>
+				</div>
+				<div class="widget am-cf">
+					<div class="widget-head am-fr">
+						<div class="widget-title am-fl">由于本站实时完成量和京东统计规则不同，所以两者数据有误差，一切数据以京东平台统计为准。</div>
+					</div>
+					<div class="widget-body am-fr">
+						<div id="toolbar" class="toolbar">
+							<a href="javascript:;" class="btn btn-primary btn-refresh" title="{:__('Refresh')}" ><i class="fa fa-refresh"></i> </a>
+							<a href="/task/jd/ids/{$ids}.html" class="btn btn-success btn-addtabs" title="还要购买" ><i class="fa fa-plus"></i>发布任务</a>
+
+						</div>
+						<table id="table" class="table table-striped table-bordered table-hover table-nowrap" width="100%">
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+ 

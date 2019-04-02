@@ -1,0 +1,62 @@
+{include file="common/sidenav" /}
+<style type="text/css">
+  .btn-default{
+    margin-top: -20px;
+  }
+</style>
+<!-- 内容区域 -->
+<div class="tpl-content-wrapper">
+  <div class="container-fluid am-cf">
+    <div class="row">
+      <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+        <p class="page-header-description"></p>
+      </div>
+    </div> 
+  </div>
+  <div class="row-content am-cf">
+    <div class="row am-cf">
+      <div class="am-u-sm-12 am-u-md-10">
+        <div class="widget am-cf">
+          <div class="widget-head am-fr">
+            <div class="widget-title am-fl">商品监控中心</div>
+            <div class="widget-function am-fr">
+              <button type="button" class="am-btn am-btn-success" data-am-modal="{target:'#addjk',closeViaDimmer:0,width:600,height:260}"><span class="am-icon-plus"></span> 添加监控</button>
+            </div>
+          </div>
+          <table id="table" class="am-table-hover" width="100%"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="addjk">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">添加竞品监控
+      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+    </div>
+    <div class="dialog-body am-fr">
+      <div class="am-form-group cgroup am-fl">
+        <label class="am-u-sm-2 am-form-label" >链接:</label>
+        <div class="am-u-sm-10">
+          <input type="text" id="jpurl"  class="am-tagsinput" placeholder="输入商品链接或者商品SKU">
+        </div>
+      </div>
+      <div class="am-form-group cgroup am-fl">
+        <label class="am-u-sm-2 am-form-label" >备注:</label>
+        <div class="am-u-sm-10">
+          <input type="text" id="jptip"  class="am-tagsinput" placeholder="监控备注,方便管理识别是哪个商品">
+        </div>
+      </div>
+      <div class="am-form-group digok am-fl">
+        <label class="am-u-sm-2 am-form-label" ></label>
+        <div class="am-u-sm-10">
+          <button type="button" class="am-btn am-btn-primary am-radius" id="addjpbtn" onclick="addjpbtn()">提交
+          </button>&nbsp;
+          <button type="button" class="am-btn am-btn-default am-radius" data-am-modal-close>取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

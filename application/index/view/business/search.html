@@ -1,0 +1,59 @@
+{include file="common/sidenav" /}
+<style type="text/css">
+	.btn-default{
+		margin-top: -20px;
+	}
+</style>
+<body >
+	<div id="content-container" class="tpl-content-wrapper">
+		<div class="row-content am-cf">
+			<div class="row am-cf">
+				<div class="am-u-md-10">
+					<div class="widget am-cf">
+					<div class="widget-head am-fr">查看排名监控详情</div>
+					<div class="widget-head am-fr">
+						<div class="widget-title am-fl w68">
+							<div class="am-u-sm-2">
+								<img style="float:left" src="" align="absmiddle" width="80px" id="xqimg">	
+							</div>
+							<div class="am-u-sm-10">
+								<p id="xqtitle"></p>
+								<p>价格：<span id="xqprice"></span>； 销量：<span id="xqsale">100</span>； 评价：<span id="xqping"></span>； </p>
+								<p><img id="ptimg" src="" width="20" height="20">店铺：<span id="xqdian"></span>； 宝贝ID/SKU：<span id="xqsku"></span> </p>
+							</div>
+						</div>
+						<div class="widget-function am-fr">
+							<button type="button" class="am-btn am-btn-success" data-am-modal="{target:'#addkey',closeViaDimmer:0,width:600,height:200}" data-am-popover="{content:'添加关键词',trigger:'hover focus'}" ><span class="am-icon-plus"></span> 添加关键词</button>
+							<a id="allzs" href="" class="am-btn am-btn-warning" data-am-popover="{content:'查看所有关键词趋势',trigger:'hover focus'}"><span class="am-icon-line-chart"></span> 所有趋势</a>
+						</div>
+					</div>
+					<table id="table" class="am-table am-table-bordered am-table-hover" width="100%"></table> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="am-modal am-modal-no-btn" tabindex="-1" id="addkey">
+	  <div class="am-modal-dialog">
+	    <div class="am-modal-hd">添加监控关键词
+	      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+	    </div>
+	    <div class="dialog-body am-fr">
+	      	<div class="am-form-group cgroup am-fl">
+	            <label class="am-u-sm-2 am-form-label">关键词:</label>
+	            <div class="am-u-sm-10" style="margin-top: 12px">
+	            	<input type="text" id="tagkeys" data-role="tagsinput" placeholder="(多个词用英文','号或者回车)">
+	            </div>
+	      	</div>
+	        <input type="hidden" id="keypt" value=""><input type="hidden" id="link_id" value="{$link_id}">
+	       	<div class="am-form-group digok am-fl">
+	            <label class="am-u-sm-2 am-form-label" ></label>
+	            <div class="am-u-sm-10">
+		        <button type="button"  class="am-btn am-btn-primary am-radius" id="addkeybtn" onclick="addkeybtn()">提交</button>&nbsp;
+		        <button type="button"  class="am-btn am-btn-default am-radius" data-am-modal-close>取消</button>
+		        </div>
+	        </div>
+	    </div>
+	  </div>
+	</div>
+</body>

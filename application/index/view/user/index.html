@@ -1,0 +1,134 @@
+{include file="common/sidenav" /}
+<!-- 内容区域 -->
+<div class="tpl-content-wrapper">
+    <div class="row-content am-cf">
+        <div class="row  am-cf">
+            <div class="am-u-md-3">
+                <div class="widget am-cf">
+                    <div class="widget-head am-cf">
+                        <div class="widget-title am-fl">Hi <span class="number">{$user.username}</span></div>
+                    </div>
+                    <div class="widget-body am-fr">
+                        <div class="am-fl am-cf">
+                            <a href="/user/changepwd.html" class="am-btn am-btn-default am-btn-xs"> <i class="am-icon-cog"></i> 个人设置 </a>
+                            <a href="/express/adds.html" class="am-btn am-btn-danger am-btn-xs"> <i class="am-icon-map-marker"></i> 发货地址 </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="am-u-md-3">
+                <div class="widget am-cf">
+                    <div class="widget-head am-cf">
+                        <div class="widget-title am-fl">当前余额：<span class="number">{$user.money}</span></div>
+                    </div>
+                    <div class="widget-body am-fr">
+                        <div class="am-fl am-cf">
+                            <a href="/user/score.html" class="am-btn am-btn-success am-btn-xs"> <i class="am-icon-search"></i> 查看明细 </a>
+                            <a href="/recharge/recharge.html" class="am-btn am-btn-warning am-btn-xs"> <i class="am-icon-rmb"></i> 立即充值 </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="am-u-md-3">
+                <div class="widget am-cf">
+                    <div class="widget-head am-cf">
+                        <div class="widget-title am-fl">推荐了：<span class="number">{$fcoun}</span>个用户</div>
+                    </div>
+                    <div class="widget-body am-fr">
+                        <div class="am-fl am-cf">
+                            <a href="/user/union.html" class="am-btn am-btn-success am-btn-xs"> <i class="am-icon-search"></i> 推广明细 </a>
+                            <a href="/user/union.html" class="am-btn am-btn-warning am-btn-xs"> <i class="am-icon-group"></i> 我要推广 </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="am-u-md-3">
+                <div class="widget am-cf">
+                    <div class="widget-head am-cf">
+                        <div class="widget-title am-fl">您是 <span class="number">{:getlv($user.level)['name']}</span></div>
+                    </div>
+                    <div class="widget-body am-fr">
+                        <div class="am-fl am-cf">
+                            <a href="/user/score.html" class="am-btn am-btn-default am-btn-xs"> 等级积分:{$user.score} </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row am-cf">
+            <div class="am-u-md-6">
+                <div class="widget am-cf">
+                    <div class="widget-head am-cf">
+                        <div class="widget-title am-fl">通知/帮助</div>
+                    </div>
+                    <div class="widget-body am-fr">
+                        <ul class="list-unstyled">
+                            {volist name="newslist" id="nl"}
+                            <li><p class="clearfix"><a href="/index/news/ids/{$nl.id}" class="pull-left" target="_blank">{$i}、{$nl.title}</a><span class="text-muted pull-right">{$nl.create_time|date="Y-m-d",###}</span></p></li>
+                            {/volist}
+                        </ul>
+                    </div>
+                </div>
+                <div class="widget am-cf">
+                    <div class="widget-head am-cf">
+                        <div class="widget-title am-fl">现在关注我们微信，即可赠送黄金会员等级积分</div>
+                    </div>
+                    <div class="widget-body am-fr" align="center">
+                        {neq name="site.weixinkf" value="0"}
+                        <img src="/uploads/20190124/3c949287ded4114b6c1d0522b77a9b44.jpg" width="300" height="300">
+                        {/neq}
+                    </div>
+                </div>
+            </div>
+            <div class="am-u-md-6">
+                <div class="widget am-cf">
+                    <div class="widget-head am-fr" style="color: red;">	{$site.unotice}</div>
+                    <div class="widget-head am-fr">
+                        <div class="widget-title am-fl">
+                            <div class="am-panel am-panel-default am-margin-bottom-xs">
+                                <div class="am-panel-bd" id="share">{$site.tginfo}。{$url}</div>
+                                <button type="button"  class="am-btn am-btn-danger am-btn-xs divcopy" data-clipboard-action="copy" data-clipboard-target="#share"><i class="am-icon-copy"></i> 点击复制</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-body am-fr">
+                        <table class="am-table am-table-striped am-table-bordered am-table-hover am-table-centered">
+                            <thead>
+                            <tr>
+                                <th>会员等级</th><th>所需积分</th><th>圆通价格</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {volist name="list" id="vr"}
+                            <tr {eq name="$vr['id']" value="$user['level']"}class="am-active"{/eq}>
+                            <td>{$vr.name}</td>
+                            <td>{$vr.low_price}</td>
+                            <td>{$vr.yto}</td>
+                            </tr>
+                            {/volist}
+                            <tr>
+                                <td colspan="3">积分规则：等级积分等于您的充值金额(如：累计充值500元，等级积分为500)</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/com/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.divcopy');
+    clipboard.on('success', function(e) {
+        //console.log(e);
+        alert("复制成功！")
+    });
+    clipboard.on('error', function(e) {
+        console.log(e);
+        alert("复制失败！请手动复制")
+    });
+
+</script>

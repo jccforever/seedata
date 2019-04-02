@@ -1,0 +1,115 @@
+{include file="common/sidenav" /}
+<div class="tpl-content-wrapper">
+    <div class="container-fluid am-cf">
+        <div class="row">
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                <p class="page-header-description">欢迎使用京东关键词排名查询功能</p>
+            </div>
+        </div> 
+    </div>
+    <div class="row-content am-cf">
+        <div class="row am-cf">
+            <div class="am-u-sm-12 am-u-md-9">
+                <div class="widget am-cf">
+                    <div class="widget-head am-fr">
+                        <div class="widget-title am-fl">京东排名查询-免费不限次数</div>
+                    </div>
+                    <div class="widget-body am-fr">
+                        <form method="get" action="" class="am-form tpl-form-line-form" id="taskForm">
+                            <div class="am-form-group am-fl">
+                                <label class="am-u-sm-2 am-form-label">终端:</label>
+                                <div class="am-u-sm-10">
+                                    <div class="am-btn-group am-btn-group-sm" data-am-button>
+                                        <label class="am-btn am-btn-secondary am-round am-active">
+                                            <input type="radio" name="zhongduan" value="0" checked>移动端
+                                        </label>
+                                        <label class="am-btn am-btn-secondary am-round">
+                                            <input type="radio" name="zhongduan" value="1">电脑端
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-form-group am-fl">
+                                <label class="am-u-sm-2 am-form-label">查询方式:</label>
+                                <div class="am-u-sm-10">
+                                    <div class="am-btn-group am-btn-group-sm" data-am-button>
+                                        <label class="am-btn am-btn-secondary am-round am-active">
+                                            <input type="radio" name="smode" value="0" checked>单品
+                                        </label>
+                                        <label class="am-btn am-btn-secondary am-round">
+                                            <input type="radio" name="smode" value="1">店铺
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-form-group am-fl">
+                                <label class="am-u-sm-2 am-form-label">排序方式:</label>
+                                <div class="am-u-sm-10">
+                                    <div class="am-btn-group am-btn-group-sm" data-am-button>
+                                        <label class="am-btn am-btn-secondary am-round am-active">
+                                            <input type="radio" name="desc" value="0" checked>综合
+                                        </label>
+                                        <label class="am-btn am-btn-secondary am-round">
+                                            <input type="radio" name="desc" value="1">销量
+                                        </label>
+                                        <label class="am-btn am-btn-secondary am-round">
+                                            <input type="radio" name="desc" value="2">评论数
+                                        </label>
+                                        <label class="am-btn am-btn-secondary am-round">
+                                            <input type="radio" name="desc" value="4">新品
+                                        </label>
+                                        <label class="am-btn am-btn-secondary am-round">
+                                            <input type="radio" name="desc" value="3">价格
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-form-group am-fl">
+                                <label class="am-u-sm-2 am-form-label">范围:</label>
+                                <div class="am-u-sm-10">
+                                    <div class="shao-input-group">
+                                        <input type="text" class="shao-input-bg" name="page1" value="1">
+                                    </div> 
+                                    <div class="shao-input-d">
+                                        到
+                                    </div>
+                                    <div class="shao-input-group">
+                                        <input type="text" class="shao-input-bg" name="page2" value="15"> 
+                                    </div>
+                                    <div class="shao-input-d">
+                                        <i class="am-btn am-btn-secondary am-btn-sm am-round am-icon-question" data-am-popover="{content: '游客最大查询10页、普通会员15页、高级会员20页、VIP会员100页',trigger: 'hover focus'}"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-form-group am-fl">
+                                <label class="am-u-sm-2 am-form-label">关键词:</label>
+                                <div class="am-u-sm-10">
+                                    <input type="text" class="tpl-form-input" name="keys" placeholder="请输入您需要查询的关键词">
+                                </div>
+                            </div>
+                            <div class="am-form-group am-fl">
+                                <label class="am-u-sm-2 am-form-label" id="jdptls">商品链接:</label>
+                                <div class="am-u-sm-10">
+                                    <input type="text" class="tpl-form-input" name="surl"  id="jdtips" placeholder="输入商品链接或者商品SKU">
+                                </div>
+                            </div>
+                            <div class="am-form-group am-fl">
+                                <label class="am-u-sm-2 am-form-label"> </label>
+                                <div class="am-u-sm-10">
+                                    <button type="submit" id="tbchaxun" class="am-btn am-btn-primary am-radius">提交查询</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="widget-footer am-fr">
+                        <div class="am-progress am-progress-striped am-active" id="progress" style="display: none;">
+                            <div id="pro10" class="am-progress-bar am-progress-bar-secondary" style="width:1%">1%
+                            </div>
+                        </div>
+                        <div id="result"></div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

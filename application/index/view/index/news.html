@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{$data.title}-{$site.name}</title>
+    <meta name="keywords" content="{$data.keywords}">
+    <meta name="description" content="{$data.desc}">
+    <link rel="shortcut icon" href="favicon.ico" />
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/assets/css/amazeui.min.css" />
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="stylesheet" href="/assets/com/index.css">
+    <style>
+        main.content {
+            width: 100%;
+            overflow: auto;
+            z-index: 10;
+            padding: 15px;
+            padding-top: 74px;
+        }
+    </style>
+</head>
+<body class="theme-white">
+    <header class="am-topbar am-topbar-fixed-top">
+        <div class="am-fl tpl-header-logo">
+            <a href="/"><img src="/assets/img/logo.png" alt=""></a>
+        </div>
+        <div class="tpl-header-fluid">
+            <div class="am-fl tpl-header-navbar">
+                <ul>
+                    <li class="am-text-sm"><a href="/">首页</a></li>
+                    <li class="am-text-sm"><a href="/user/index.html">用户中心</a></li>
+                    <li class="am-text-sm"><a href="/user/union.html">推广中心</a></li>
+                    <li class="am-text-sm"><a href="https://www.kanshuju.com/" target="_blank">卖家工具箱</a></li>
+                </ul>
+            </div>
+            <div class="am-fr tpl-header-navbar">
+                <ul>
+                    {if $user}
+                    <li class="am-text-sm"><a href="{:url('user/index')}">您好：{$user.username}</a></li>
+                    <li class="am-text-sm"><a href="{:url('user/score')}"><i class="am-icon-rmb"></i>{$user.money}</a></li>
+                    <li class="am-text-sm"><a href="{:url('user/logout')}"><i class="am-icon-sign-out"></i>退出</a></li>
+                    {else /}
+                    <li class="am-text-sm"><a href="{:url('user/login')}"><i class="am-icon-key"></i> 登录</a></li>
+                    <li class="am-text-sm"><a href="{:url('user/register')}"><i class="am-icon-user-plus"></i> 注册</a></li>
+                    {/if}
+                </ul>
+            </div>
+        </div>
+    </header>
+    <main class="content">
+        <div class="container" style="overflow: hidden;">
+            <div class="row">
+                <div class="am-u-md-9">
+                    <ol class="am-breadcrumb">
+                        <li><a href="/">首页</a></li>
+                        <li><a href="/index/lists/ids/{$data.category_id}.html">{$data['category_id']=='1'?'帮助说明':'网站公告'}</a></li>
+                        <li class="am-active">内容</li>
+                    </ol>
+                    <article class="am-article">
+                        <div class="am-article-hd" align="center">
+                            <h1 class="am-article-title">{$data.title}</h1>
+                            <p class="am-article-meta">{$site.name}   {$data.create_time|date="Y-m-d",###}</p>
+                        </div>
+                        <div class="am-article-bd">
+                            {$data.content}
+                        </div>
+                    </article>
+                </div>
+                <div class="am-u-sm-12 am-u-md-3">
+                    <div class="widget am-cf">
+                        <div data-am-widget="list_news" class="am-list-news am-list-news-default" >
+                            <div class="am-list-news-hd am-cf">
+                                    <h2>最新文章</h2>
+                            </div>
+                            <div class="am-list-news-bd">
+                                <ul class="am-list">
+                                    {volist name="newslist" id="nl"}
+                                    <li class="am-g am-list-item-dated">
+                                        <a href="/index/news/ids/{$nl.id}.html" class="am-list-item-hd">{$nl.title}</a>
+                                        <span class="am-list-date">{$nl.create_time|date="Y-m-d",###}</span>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {include file="common/rightad" /}
+            </div>
+        </div>
+    </main>
+    <footer class="am-footer am-footer-default">
+        <div class="am-footer-miscs">
+            <p>&copy; 2017-2018 <a href="/" target="_blank">{$site.name}</a>. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
