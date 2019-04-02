@@ -442,10 +442,11 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
                     url:'/business/get_competitor',
                     success:function(res){
                         var formdata = res.data;
+                        console.log(formdata);
                         var output = "<table class='am-table am-table-striped am-table-bordered am-table-hover' id='tablist'><thead><tr><th>标题</th><th>持续</th></tr></thead><tbody>";
                         for(var i in formdata){
                             if(!formdata[i].end_title){
-                                var titles = "<font color='#0e90d2'>现:</font>"+formdata[i].start_title+" <font color='#0e90d2'>使用中<br>原:</font>"+formdata[i].start_time+" <font color='#0e90d2'>监控:"+formdata[i].start_time+"</font>";
+                                var titles = "<font color='#0e90d2'>现:</font>"+formdata[i].start_title+" <font color='#0e90d2'>使用中<br>原:</font>"+formdata[i].start_title+" <font color='#0e90d2'>监控:"+formdata[i].start_time+"</font>";
                             }else{
                                 var titles = "<font color='#0e90d2'>现:</font>"+formdata[i].end_title+" <font color='#0e90d2'>修改:"+formdata[i].end_time+"<br>原:</font>"+formdata[i].start_title+" <font color='#0e90d2'>监控:"+formdata[i].start_time+"</font>";
                             }
