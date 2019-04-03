@@ -1080,4 +1080,11 @@ class Business extends Frontend
             }
         }
     }
+    /**
+     * 我在测试git
+     */
+    public function test_git()
+    {
+        echo "很开心第一次认识你 GIT!";
+    }
 }
