@@ -967,4 +967,123 @@ class Business extends Frontend
             }  
         }
     }
+    /**
+     * 竞品排名定时任务
+     */
+    public function contend_crontab()
+    {
+        set_time_limit(0);
+        $timestart = strtotime(date("Y/m/d 00:00:00",time()-24*60*60*1));//昨日开始
+        $timeend   = strtotime(date("Y/m/d 23:59:59",time()-24*60*60*1));//昨天结束 
+        $one = Db::name('competitor')->where('last_update_time','between',[$timestart,$timeend])->find();
+        $n = 1;
+        // $apiUrl = 'https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?data=%7B%22itemNumId%22%3A%22'.$one['link_id'].'%7D&qq-pf-to=pcqq.group';
+        // $json = sendRequest($apiUrl,$params=[],'GET');
+        // $arr = json_decode($json,1);
+        // // dump($arr);
+        // dump($arr['data']['item']);
+        // exit;
+        while($one){
+            if($one['terrace']=='天猫' || $one['terrace']=='淘宝'){
+                $link_id = $one['link_id'];
+                $apiUrl = 'https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?data=%7B%22itemNumId%22%3A%22'.$link_id.'%7D&qq-pf-to=pcqq.group';
+                $json = sendRequest($apiUrl,$params=[],'GET');
+                $arr = json_decode($json,1);
+                $n++;
+                if(is_array($arr) && $arr['data']['item']){
+                    $goods_id = $arr['data']['item']['itemId'];//宝贝id
+                    $goods_title = $arr['data']['item']['title'];//宝贝标题
+                    $goods_img = $arr['data']['item']['images'][0];//宝贝主图
+                    $mockData = $arr['data']['mockData'];
+                    $mockData = json_decode($mockData,1);
+                    $goods_price = $mockData['price']['price']['priceText'];//商品价格
+                    $value = $arr['data']['apiStack'][0]['value'];
+                    $value = json_decode($value,1);
+                    $sale_count = $value['item']['sellCount'];//销量
+                    $remark_count = $arr['data']['item']['commentCount'];//评价
+                    $shop_name = $arr['data']['seller']['shopName'];//店铺名称
+                    $rank_record = json_encode(compact('goods_id','goods_title','goods_img','goods_price','sale_count','remark_count','shop_name'));
+                    //更新竞品
+                    $insert['add_time'] = time();
+                    $insert['last_update_time'] = time();
+                    $insert['shop_name'] = $shop_name;
+                    $sql = Db::name('competitor')->where('id',$one['id'])->update($insert);
+                    //保存记录
+                    $insert2 = [
+                        'for_table'=>'competitor',
+                        'rank_record'=>$rank_record,
+                        'user_id' =>$one['user_id'],
+                        'goods_id'=>$link_id,
+                        'goods_title'=>$goods_title,
+                        'goods_img' =>$goods_img,
+                        'goods_price'=>$goods_price,
+                        'sale_count'=>$sale_count,
+                        'remark_count'=>$remark_count,
+                        'add_time'=>time(),
+                        'for_id'=>$one['id'],
+                        'terrace'=>$one['terrace'],
+                        'shop_name'=>$shop_name,
+                        'update_time'=>time()
+                    ];
+                    $sql2 = Db::name('rank_record')->insert($insert2);
+                    $one = null;
+                }else{
+                    if($n==3){
+                        $sql = Db::name('competitor')->where('id',$one['id'])->setField(['try_count'=>$n,'last_update_time'=>time()]);
+                        echo "未找到该商品,竞品排名更新失败";
+                        $one = null;
+                    }
+                }
+            }elseif($one['terrace']=='京东'){
+                $apiUrl = 'https://re.jd.com/cps/item/'.$one['link_id'].'.html';
+                $json = sendRequest($apiUrl,$params=[],'GET');
+                $start = 'var pageData';
+                $end = '};';
+                $json = strbu($json,$start,$end);
+                $json = $json."}";
+                $json = trim(str_replace(' = ','', $json));
+                $arr = json_decode($json,1);
+                $n++;
+                if(!is_array($arr) || !$arr['detail']['ad_title']){
+                    if($n==3){
+                        $sql = Db::name('competitor')->where('id',$one['id'])->setField(['try_count'=>$n,'last_update_time'=>time()]);
+                        echo "未找到该商品,竞品排名更新失败";
+                        $one = null;
+                    }
+                }
+                $goods_id = $arr['detail']['sku_id'];//宝贝id
+                $goods_title = $arr['detail']['ad_title'];//宝贝标题
+                $goods_img = '//img13.360buyimg.com/n1/s450x450_'.$arr['att_imgs'][0];//宝贝主图
+                $goods_price = $arr['detail']['sku_price'];//商品价格
+                $sale_count = 0;//销量
+                $remark_count = $arr['detail']['commentnum'];//累计评价
+                $shop_name = $arr['shop']['name'];//店铺名称
+                $rank_record = json_encode(compact('goods_id','goods_title','goods_img','goods_price','sale_count','remark_count','shop_name'));
+                //更新竞品
+                $insert['add_time'] = time();
+                $insert['last_update_time'] = time();
+                $insert['shop_name'] = $shop_name;
+                $sql = Db::name('competitor')->where('id',$one['id'])->update($insert);
+                //保存记录
+                $insert2 = [
+                    'for_table'=>'competitor',
+                    'rank_record'=>$rank_record,
+                    'user_id' =>$one['user_id'],
+                    'goods_id'=>$one['link_id'],
+                    'goods_title'=>$goods_title,
+                    'goods_img' =>$goods_img,
+                    'goods_price'=>$goods_price,
+                    'sale_count'=>$sale_count,
+                    'remark_count'=>$remark_count,
+                    'add_time'=>time(),
+                    'for_id'=>$one['id'],
+                    'terrace'=>$one['terrace'],
+                    'shop_name'=>$shop_name,
+                    'update_time'=>time()
+                ];
+                $sql2 = Db::name('rank_record')->insert($insert2);
+                $one = null;
+            }
+        }
+    }
 }
