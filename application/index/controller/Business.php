@@ -977,12 +977,6 @@ class Business extends Frontend
         $timeend   = strtotime(date("Y/m/d 23:59:59",time()-24*60*60*1));//昨天结束 
         $one = Db::name('competitor')->where('last_update_time','between',[$timestart,$timeend])->find();
         $n = 1;
-        // $apiUrl = 'https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?data=%7B%22itemNumId%22%3A%22'.$one['link_id'].'%7D&qq-pf-to=pcqq.group';
-        // $json = sendRequest($apiUrl,$params=[],'GET');
-        // $arr = json_decode($json,1);
-        // // dump($arr);
-        // dump($arr['data']['item']);
-        // exit;
         while($one){
             if($one['terrace']=='天猫' || $one['terrace']=='淘宝'){
                 $link_id = $one['link_id'];
