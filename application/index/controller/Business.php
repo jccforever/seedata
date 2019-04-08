@@ -515,7 +515,7 @@ class Business extends Frontend
                 $goods_title = $arr['detail']['ad_title'];//宝贝标题
                 $goods_img = '//img13.360buyimg.com/n1/s450x450_'.$arr['att_imgs'][0];//宝贝主图
                 $goods_price = $arr['detail']['sku_price'];//商品价格
-                $sale_count = 0;//销量
+                $sale_count = $this->jd_sales($link_id);//宝贝销量
                 $remark_count = $arr['detail']['commentnum'];//累计评价
                 $shop_name = $arr['shop']['name'];//店铺名称
                 $rank_record = json_encode(compact('goods_id','goods_title','goods_img','goods_price','sale_count','remark_count','shop_name'));
@@ -864,7 +864,10 @@ class Business extends Frontend
                     if($n==3){
                         Db::name('links_keywords')->where('id',$one['id'])->setField(['try_count'=>$n,'create_time'=>time()]);
                         echo "未查到记录";
-                        $one = null;
+                        $one = Db::name('links_keywords')
+                        ->where(['create_time'=>['between',[$timestart,$timeend]]])
+                        ->find();
+                        $n = 1;
                     }
                 }else{
                     //处理业务
@@ -907,8 +910,11 @@ class Business extends Frontend
                         'for_table'=>'monitor'
                     ];
                     $sql2 = Db::name('rank_record')->insert($insert);
+                    $sql3 = Db::name('links')->where('id',$one['id'])->setField(['shop_name'=>$shop_name,'update_time'=>time()]);
                     file_put_contents('log.text', $sql2);
-                    $one=null;
+                    $one = Db::name('links_keywords')
+                    ->where(['create_time'=>['between',[$timestart,$timeend]]])
+                    ->find();
                 } 
             }elseif($one['terrace']=='京东'){
                 $n++;
@@ -917,7 +923,10 @@ class Business extends Frontend
                     if($n==3){
                         Db::name('links_keywords')->where('id',$one['id'])->setField(['try_count'=>$n,'create_time'=>time()]);
                         echo "未查到记录";
-                        $one = null;
+                        $one = Db::name('links_keywords')
+                                ->where(['create_time'=>['between',[$timestart,$timeend]]])
+                                ->find();
+                                $n = 1;
                     }
                 }else{
                     $items = $data;
@@ -961,8 +970,10 @@ class Business extends Frontend
                         'for_table'=>'monitor'
                     ];
                     $sql2 = Db::name('rank_record')->insert($insert);
-                    file_put_contents('log.text', $sql2);
-                    $one=null;
+                    $sql3 = Db::name('links')->where('id',$one['id'])->setField(['shop_name'=>$shop_name,'update_time'=>time()]);
+                    $one = Db::name('links_keywords')
+                            ->where(['create_time'=>['between',[$timestart,$timeend]]])
+                            ->find();
                 }
             }  
         }
@@ -1081,10 +1092,76 @@ class Business extends Frontend
         }
     }
     /**
-     * 我在测试git
+     * 获取京东商品销量
      */
-    public function test_git()
+    public function jd_sales($goods_id)
     {
-        echo "很开心第一次认识你 GIT!";
+        //公共参数
+        $serverUrl = 'https://api.jd.com/routerjson';//url
+        $access_token = '3df0d2f9-5688-4590-aa64-e6cc73fbca56';
+        $app_key = '8989B5297BF7486182D2FF38994A4FA4';
+        $app_secret = '84bb90c4617a437e91b96310452e7c3d';
+        $vesion = '2.0';
+        $format = 'json';
+        $method = 'jingdong.service.promotion.goodsInfo';
+        $timestamp = date('Y-m-d H:i:s');
+        $skuIds = $goods_id;
+        $skuIds = [
+            'skuIds'=>$skuIds
+        ];
+        $params = array(
+            'method'=>$method,
+            'access_token'=>$access_token,
+            'app_key'=>$app_key,
+            'timestamp'=>$timestamp,
+            'format' =>$format,
+            'v'=>$vesion,
+            '360buy_param_json'=>json_encode($skuIds)
+        );
+        //生成签名
+        $sign = $this->createJdsign($params);
+        //组装参数
+        $strParams = $this->createJdStrParam($params);
+        $strParams .='sign='.$sign; 
+        $url = $serverUrl.'?'.$strParams;
+        //请求
+        $json = sendRequest($url,$params=[],'GET');
+        $arr = json_decode($json,1);
+        $res = $arr['jingdong_service_promotion_goodsInfo_responce'];
+        $res = $res['getpromotioninfo_result'];
+        $res = json_decode($res,1);
+        $result = $res['result'][0];
+        $sales_count = $result['inOrderCount'];
+        return $sales_count;
+    }
+    /**
+     * 生成京东签名
+     */
+    public function createJdsign($params)
+    {
+        ksort($params);
+        $access_token = '84bb90c4617a437e91b96310452e7c3d';
+        $str = '';
+        foreach ($params as $k=>$v){
+            if('@' !=substr($v,0,1)){
+                $str .= "$k$v";
+            }
+        }
+        $sign = $access_token.$str.$access_token;
+        $sign = strtoupper(md5($sign));
+        return $sign;
+    }
+    /**
+     * 京东api组装参数
+     */
+    public function createJdStrParam($paramArr)
+    {
+        $strParam = "";
+        foreach($paramArr as $key=>$val){
+            if($key !=''&& $val !=''){
+                $strParam .=$key.'='.urlencode($val).'&';
+            }
+        }
+        return $strParam;
     }
 }
