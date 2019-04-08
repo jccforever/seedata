@@ -145,13 +145,7 @@ class Crontab extends Controller
         $url = $serverUrl.'?'.$strParams;
         //请求
         $json = sendRequest($url,$params=[],'GET');
-        $arr = json_decode($json,1);
-        $res = $arr['jingdong_service_promotion_goodsInfo_responce'];
-        $res = $res['getpromotioninfo_result'];
-        $res = json_decode($res,1);
-        $result = $res['result'][0];
-        $sales_count = $result['inOrderCount'];
-        return $sales_count;
+        return $json;
         
     }
     /**
@@ -223,6 +217,13 @@ class Crontab extends Controller
                     }
                 }else{
                     //处理业务
+                    $tbApiUrl = 'https://acs.m.taobao.com/h5/mtop.taobao.detail.getdetail/6.0/?data=%7B%22itemNumId%22%3A%22'.$one['link_id'].'%7D&qq-pf-to=pcqq.group';
+                    $tbJson = sendRequest($tbApiUrl,$params=[],'GET');
+                    $tbArr = json_decode($tbJson,1);
+                    $value = $tbArr['data']['apiStack'][0]['value'];
+                    $value = json_decode($value,1);
+                    $sale_count = $value['item']['sellCount'];//销量
+                    $comment_num = $tbArr['data']['item']['commentCount'];//评价
                     $goods_title = $items[0]['title'];//商品标题
                     $shop_name = $items[0]['nick'];//店铺名称
                     $goods_img = $items[0]['img'];//商品主图
@@ -259,6 +260,8 @@ class Crontab extends Controller
                         'goods_title'=>$goods_title,
                         'goods_img'=>$goods_img,
                         'goods_price'=>$goods_price,
+                        'sale_count' =>$sale_count,
+                        'remark_count'=>$comment_num,
                         'for_table'=>'monitor'
                     ];
                     $sql2 = Db::name('rank_record')->insert($insert);
@@ -292,6 +295,13 @@ class Crontab extends Controller
                     $strJson['page'] = $page;
                     $strJson['pos'] = $position;
                     $strJson = json_encode($strJson);
+                    $jdJson = $this->jd_sales($one['link_id']);
+                    $jdArr = json_decode($jdJson,1);
+                    $jdArray = $jdArr['jingdong_service_promotion_goodsInfo_responce'];
+                    $jdArray = $jdArray['getpromotioninfo_result'];
+                    $jdRes = json_decode($jdArray,1);
+                    $jd_result = $jdRes['result'][0];
+                    $sale_count = $jd_result['inOrderCount'];//宝贝销量
                     //更新数据
                     $update = [
                         'mobile_update_time'=>time(),
@@ -318,6 +328,8 @@ class Crontab extends Controller
                         'goods_title'=>$goods_title,
                         'goods_img'=>$goods_img,
                         'goods_price'=>$goods_price,
+                        'remark_count'=>$comment_num,
+                        'sale_count'=>$sale_count,
                         'for_table'=>'monitor'
                     ];
                     $sql2 = Db::name('rank_record')->insert($insert);
@@ -399,7 +411,6 @@ class Crontab extends Controller
                 $json = $json."}";
                 $json = trim(str_replace(' = ','', $json));
                 $arr = json_decode($json,1);
-                $n++;
                 if(!is_array($arr) || !$arr['detail']['ad_title']){
                     $n++;
                     if($n==3){
@@ -409,11 +420,22 @@ class Crontab extends Controller
                         echo "未找到该商品,竞品更新失败";
                     }
                 }
-                $goods_id = $arr['detail']['sku_id'];//宝贝id
-                $goods_title = $arr['detail']['ad_title'];//宝贝标题
-                $goods_img = '//img13.360buyimg.com/n1/s450x450_'.$arr['att_imgs'][0];//宝贝主图
-                $goods_price = $arr['detail']['sku_price'];//商品价格
-                $sale_count = $this->jd_sales($one['link_id']);//销量
+                $jdJson = $this->jd_sales($one['link_id']);
+                $jdArr = json_decode($jdJson,1);
+                $jdArray = $jdArr['jingdong_service_promotion_goodsInfo_responce'];
+                $jdArray = $jdArray['getpromotioninfo_result'];
+                $jdRes = json_decode($jdArray,1);
+                $jd_result = $jdRes['result'][0];
+                $goods_id = $jd_result['skuId'];//宝贝id
+                $goods_title = $jd_result['goodsName'];//宝贝标题
+                $goods_img = $jd_result['imgUrl'];//宝贝主图
+                $goods_price = $jd_result['unitPrice'];//商品价格
+                $sale_count = $jd_result['inOrderCount'];//宝贝销量
+                // $goods_id = $arr['detail']['sku_id'];//宝贝id
+                // $goods_title = $arr['detail']['ad_title'];//宝贝标题
+                // $goods_img = '//img13.360buyimg.com/n1/s450x450_'.$arr['att_imgs'][0];//宝贝主图
+                // $goods_price = $arr['detail']['sku_price'];//商品价格
+                // $sale_count = $this->jd_sales($one['link_id']);//销量
                 $remark_count = $arr['detail']['commentnum'];//累计评价
                 $shop_name = $arr['shop']['name'];//店铺名称
                 $rank_record = json_encode(compact('goods_id','goods_title','goods_img','goods_price','sale_count','remark_count','shop_name'));
