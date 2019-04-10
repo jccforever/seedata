@@ -150,7 +150,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
                         {field: 'update_time', title:'更新时间' , operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
                         {field:'operate','title':__('Operate'),formatter:function(value,row,index){
                             var search = '<a href="/Business/search?id='+row.id+'&link_id='+row.link_id+'"  data-toggle="tooltip" data-original-title="查看详情"><i class="fa fa-search" aria-hidden="true"></i></a> ';
-                            var chart = '<a href="javascript:void(0)" data-toggle="tooltip" data-original-title="查看趋势"><i class="fa fa-line-chart" aria-hidden="true"></i> ';
+                            var chart = '<a href="/business/monitor_echarts?id='+row.id+'" data-toggle="tooltip"  data-original-title="查看趋势"><i class="fa fa-line-chart" aria-hidden="true"></i> ';
                             var del = '<a href="javascript:void(0)" data-toggle="tooltip" data-original-title="删除监控" onclick="del_link('+row.link_id+')"><i class="fa fa-trash-o" aria-hidden="true"></i> ';
                             return search+chart+del;
                         }}   
@@ -185,10 +185,6 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
             		}
             	});
             };
-            //获取排名商品详情
-            window.get_search = function(){
-                console.log('hello world')
-            }
             //删除宝贝
             window.del_link = function(ids){
                 $.ajax({
@@ -208,7 +204,75 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
             }
             // 为表格绑定事件
             Table.api.bindevent(table);
-    	},
+        },
+        monitor_echarts:function(){
+            function options(names,datas){
+                var option = {
+                    title: {
+                        text: '关键词排名折线图堆叠'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data:names
+                    },
+                    grid: {
+                        left: '%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['周一','周二','周三','周四','周五','周六','周日']
+                    },
+                    yAxis: {
+                        // inverse: true,
+                        type: 'value'
+                    },
+                    series:datas
+                };
+                return option;
+            }
+            function getUrlParam(name)
+            {
+                var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if(r!=null)return  unescape(r[2]); return null;
+            }
+            $(document).ready(function(){
+                var ids = getUrlParam('id');
+                $.ajax({
+                    data:{id:ids},
+                    dataType:'json',
+                    type:'post',
+                    url:'/business/get_monitor_echarts',
+                    success:function(res){
+                        var json = res.info;
+                        var names = new Array();
+                        var date = new Array();
+                        var datas = new Array();
+                        var j = 0;
+                        console.log(json);
+                        for(var i in json){
+                            names.push(json[i].name);
+                            datas[j] = {name:json[i].name,data:json[i].data,type:'line'};
+                            j++;
+                        }
+                        var myChart = Echarts.init(document.getElementById('tpl-echarts-A'));
+                        var option = options(names,datas);
+                        myChart.setOption(option);
+                    }
+                })
+            })
+        },
     	search:function(){
             function getUrlParam(name)
             {

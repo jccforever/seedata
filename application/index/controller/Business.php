@@ -662,8 +662,11 @@ class Business extends Frontend
             $arr = json_decode($json,1);
             $for_id = $arr['id'];//宝贝主键
             $fieldname = $arr['fieldname'];//操作名称
+            $start_time = strtotime('-1 month',time());
+            $end_time = time();
             $data = Db::name('rank_record')
                     ->where(['for_table'=>'competitor','for_id'=>$for_id])
+                    ->where('add_time','between',[$start_time,$end_time])
                     ->order('add_time asc')
                     ->field('goods_price,sale_count,remark_count,add_time')
                     ->select();
@@ -671,6 +674,74 @@ class Business extends Frontend
                 $data[$key]['add_time'] = date('Y-m-d',$val['add_time']);
             }
             return ['code'=>1,'msg'=>'OK','json'=>$data];
+        }
+    }
+    /**
+     * 竞品排名html
+     *
+     * @return void
+     */
+    public function monitor_echarts()
+    {
+        return $this->view->fetch();
+    }
+    /**
+     * 关键词排名图
+     *
+     * @return void
+     */
+    public function get_monitor_echarts(Request $request)
+    {
+        if($request->isPost()){
+            $id = input('post.id');
+            //查询所有关键词
+            $keywords = Db::name('links_keywords')->where('for_id',$id)->field('keywords,link_id,create_time')->select();
+            $info = [];
+            foreach($keywords as $key=>$val){
+                $info[$val['keywords']] = Db::name('rank_record')->where(['keywords'=>$val['keywords'],'goods_id'=>$val['link_id']])->field('keywords,page,position,add_time')->select();
+                // $info[$val['keywords']]['keywords_time'] = $val['create_time'];
+            }
+            //获取最先加入的关键词
+            $first_keywords = Db::name('links_keywords')->where('for_id',$id)->order('create_time asc')->field('keywords,link_id,create_time')->find();
+            $start_time = $first_keywords['create_time'];
+            $base_time = [];
+            foreach($info as $k=>$v){
+                foreach($v as $kt=>$vt){
+                    if($vt['add_time']){
+                        $base_time[$k][] = date('Y-m-d',$vt['add_time']);
+                    }
+                }
+            }
+            //处理排名数据
+            $data = [];
+            $time = [];
+            foreach($info as $key=>$val){
+                // $count = $this->get_days($start_time,$val['keywords_time']);
+                // if($count){
+                //     for($i=0;$i<=$count;$i++){
+                //         $data[$key][] = null;
+                //         $time[$key][] = date('Y-m-d',$start_time+$i*86400);
+                //     }
+                // }
+                foreach($val as $index=>$element){
+                    // if($element['add_time']){
+                        // foreach($base_time as $bs=>$bv){
+                        //     if(in_array(date('Y-m-d',$element['add_time']),$bv)){
+
+                        //     }
+                        // }
+                        $data[$key][] = $element['page']*10+$element['position'];
+                        $time[$key][] = date('Y-m-d',$element['add_time']);
+                    // }
+                }
+            }
+            $return = [];
+            foreach($data as $key=>$vo){
+                $return [$key]['data'] = $vo;
+                $return[$key]['name'] = $key;
+                $return[$key]['time'] = $time[$key];
+            }
+            return ['code'=>1,'msg'=>'获取成功','info'=>$return];
         }
     }
     /**
@@ -853,10 +924,15 @@ class Business extends Frontend
      */
     public function get_days($start_time,$end_time)
     {
-        $start_time = strtotime($start_time);
-        $end_time = strtotime($end_time);
-        $diff = ($end_time-$start_time)/86400;
-        return $diff;
+        if(is_string($start_time) && is_string($end_time)){
+            $start_time = strtotime($start_time);
+            $end_time = strtotime($end_time);
+            $diff = ($end_time-$start_time)/86400;
+            return (int)$diff;
+        }else{
+            $diff = ($end_time-$start_time)/86400;
+            return (int)$diff;
+        }
     }
     /**
      * 获取京东商品销量
