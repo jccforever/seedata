@@ -234,7 +234,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
                         data: dates
                     },
                     yAxis: {
-                        // inverse: true,
+                        inverse: true,//当它为true时y从小到大
                         type: 'value'
                     },
                     series:datas
