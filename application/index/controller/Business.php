@@ -693,46 +693,42 @@ class Business extends Frontend
     public function get_monitor_echarts(Request $request)
     {
         if($request->isPost()){
-            $id = input('post.id');
+            $id = input('post.id');//获取商品的id
             //查询所有关键词
-            $keywords = Db::name('links_keywords')->where('for_id',$id)->field('keywords,link_id,create_time')->select();
+            $uid = $this->auth->id;
+            $keywords = Db::name('links_keywords')->where(['for_id'=>$id,'user_id'=>$uid])->field('keywords,link_id')->select();
             $info = [];
             foreach($keywords as $key=>$val){
-                $info[$val['keywords']] = Db::name('rank_record')->where(['keywords'=>$val['keywords'],'goods_id'=>$val['link_id']])->field('keywords,page,position,add_time')->select();
-                // $info[$val['keywords']]['keywords_time'] = $val['create_time'];
+                $info[$val['keywords']] = Db::name('rank_record')->where(['keywords'=>$val['keywords'],'goods_id'=>$val['link_id'],'user_id'=>$uid])->field('keywords,page,position,add_time')->select();
             }
-            //获取最先加入的关键词
-            $first_keywords = Db::name('links_keywords')->where('for_id',$id)->order('create_time asc')->field('keywords,link_id,create_time')->find();
-            $start_time = $first_keywords['create_time'];
             $base_time = [];
-            foreach($info as $k=>$v){
-                foreach($v as $kt=>$vt){
-                    if($vt['add_time']){
-                        $base_time[$k][] = date('Y-m-d',$vt['add_time']);
-                    }
+            foreach($info as $bs=>$bv){
+                foreach($bv as $timeKey=>$timeVal){
+                    $base_time[] = $timeVal['add_time'];
                 }
             }
-            //处理排名数据
+            asort($base_time);
+            $baseTime = [];
+            foreach($base_time as $sort=>$sVal){
+                $baseTime[] = date('Y-m-d',$sVal); 
+            }
+            $baseTime = array_values(array_unique($baseTime));
             $data = [];
             $time = [];
-            foreach($info as $key=>$val){
-                // $count = $this->get_days($start_time,$val['keywords_time']);
-                // if($count){
-                //     for($i=0;$i<=$count;$i++){
-                //         $data[$key][] = null;
-                //         $time[$key][] = date('Y-m-d',$start_time+$i*86400);
-                //     }
-                // }
-                foreach($val as $index=>$element){
-                    // if($element['add_time']){
-                        // foreach($base_time as $bs=>$bv){
-                        //     if(in_array(date('Y-m-d',$element['add_time']),$bv)){
-
-                        //     }
-                        // }
-                        $data[$key][] = $element['page']*10+$element['position'];
-                        $time[$key][] = date('Y-m-d',$element['add_time']);
-                    // }
+            foreach($keywords as $index=>$element){
+                for($i=0;$i<count($baseTime);$i++){
+                    $search = Db::name('rank_record')
+                                ->where(['user_id'=>$uid,'keywords'=>$element['keywords'],'goods_id'=>$element['link_id']])
+                                ->where('FROM_UNIXTIME(add_time, "%Y-%m-%d") = "'.$baseTime[$i].'"')
+                                ->field('keywords,page,position,add_time')
+                                ->find();
+                    if($search){
+                        $data[$element['keywords']][] = $search['page']*10+$search['position'];
+                        $time[$element['keywords']][] = date('Y-m-d',$search['add_time']);
+                    }else{
+                        $data[$element['keywords']][] = '';
+                        $time[$element['keywords']][] = $baseTime[$i];
+                    }
                 }
             }
             $return = [];

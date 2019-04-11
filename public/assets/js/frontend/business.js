@@ -206,7 +206,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
             Table.api.bindevent(table);
         },
         monitor_echarts:function(){
-            function options(names,datas){
+            function options(names,datas,dates){
                 var option = {
                     title: {
                         text: '关键词排名折线图堆叠'
@@ -218,7 +218,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
                         data:names
                     },
                     grid: {
-                        left: '%',
+                        left: '3%',
                         right: '4%',
                         bottom: '3%',
                         containLabel: true
@@ -231,7 +231,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
                     xAxis: {
                         type: 'category',
                         boundaryGap: false,
-                        data: ['周一','周二','周三','周四','周五','周六','周日']
+                        data: dates
                     },
                     yAxis: {
                         // inverse: true,
@@ -260,14 +260,17 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
                         var date = new Array();
                         var datas = new Array();
                         var j = 0;
-                        console.log(json);
+                        var dates = new Array();
+                        // console.log(json);
                         for(var i in json){
                             names.push(json[i].name);
                             datas[j] = {name:json[i].name,data:json[i].data,type:'line'};
                             j++;
+                            dates = json[i].time;
                         }
                         var myChart = Echarts.init(document.getElementById('tpl-echarts-A'));
-                        var option = options(names,datas);
+                        var option = options(names,datas,dates);
+                        console.log(option);
                         myChart.setOption(option);
                     }
                 })
