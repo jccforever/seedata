@@ -130,7 +130,8 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
                 sortName: 'id',
 				showToggle: false,
 				showColumns: false,
-				showExport: false,
+                showExport: false,
+                commonSearch: false,
                 columns: [
                     [
                         {field: 'id', title: '#'},
@@ -149,8 +150,8 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
                         {field: 'keywords_num', title: '关键字数量'},
                         {field: 'update_time', title:'更新时间' , operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
                         {field:'operate','title':__('Operate'),formatter:function(value,row,index){
-                            var search = '<a href="/Business/search?id='+row.id+'&link_id='+row.link_id+'"  data-toggle="tooltip" data-original-title="查看详情"><i class="fa fa-search" aria-hidden="true"></i></a> ';
-                            var chart = '<a href="/business/monitor_echarts?id='+row.id+'" data-toggle="tooltip"  data-original-title="查看趋势"><i class="fa fa-line-chart" aria-hidden="true"></i> ';
+                            var search = '<a href="/Business/search?id='+row.id+'&link_id='+row.link_id+'&terrace='+row.terrace+'"  data-toggle="tooltip" data-original-title="查看详情"><i class="fa fa-search" aria-hidden="true"></i></a> ';
+                            var chart = '<a href="/business/monitor_echarts?id='+row.id+'&keywords_id=00&link_id='+row.link_id+'&terrace='+row.terrace+'" data-toggle="tooltip"  data-original-title="查看趋势"><i class="fa fa-line-chart" aria-hidden="true"></i> ';
                             var del = '<a href="javascript:void(0)" data-toggle="tooltip" data-original-title="删除监控" onclick="del_link('+row.link_id+')"><i class="fa fa-trash-o" aria-hidden="true"></i> ';
                             return search+chart+del;
                         }}   
@@ -206,10 +207,10 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
             Table.api.bindevent(table);
         },
         monitor_echarts:function(){
-            function options(names,datas,dates){
+            function options(names,datas,dates,title){
                 var option = {
                     title: {
-                        text: '关键词排名折线图堆叠'
+                        text: title
                     },
                     tooltip: {
                         trigger: 'axis'
@@ -245,12 +246,29 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
             {
                 var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
                 var r = window.location.search.substr(1).match(reg);
-                if(r!=null)return  unescape(r[2]); return null;
+                if(r!=null)return  decodeURI(r[2]); return null;
             }
+            $('input[name="days"]').on('click',function(){
+                var period = $(this).val();
+                get_echarts(period);
+            })
             $(document).ready(function(){
+                var period = $('input[name="days"]:checked').val();
+                get_echarts(period);
+            })
+            function get_echarts(period){
                 var ids = getUrlParam('id');
+                var keywords_id = getUrlParam('keywords_id');
+                var link_id = getUrlParam('link_id');
+                $('#xqsku').html(link_id);
+                var terrace = getUrlParam('terrace');
+                if(terrace=='天猫' || terrace=='淘宝'){
+                    $('#ptimg').attr('src','/assets/img/tb.png');
+                }else if(terrace=='京东'){
+                    $('#ptimg').attr('src','/assets/img/jd.png');
+                }
                 $.ajax({
-                    data:{id:ids},
+                    data:{id:ids,keywords_id:keywords_id,period:period},
                     dataType:'json',
                     type:'post',
                     url:'/business/get_monitor_echarts',
@@ -261,30 +279,34 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
                         var datas = new Array();
                         var j = 0;
                         var dates = new Array();
-                        // console.log(json);
+                        var title = '关键词排名折线图堆叠';
                         for(var i in json){
                             names.push(json[i].name);
                             datas[j] = {name:json[i].name,data:json[i].data,type:'line'};
                             j++;
                             dates = json[i].time;
                         }
+                        if(j==1){
+                            title = '单个关键词排名折线图'
+                        }
                         var myChart = Echarts.init(document.getElementById('tpl-echarts-A'));
-                        var option = options(names,datas,dates);
-                        console.log(option);
+                        var option = options(names,datas,dates,title);
                         myChart.setOption(option);
                     }
                 })
-            })
+            }
         },
     	search:function(){
             function getUrlParam(name)
             {
                 var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
                 var r = window.location.search.substr(1).match(reg);
-                if(r!=null)return  unescape(r[2]); return null;
+                if(r!=null)return  decodeURI(r[2]); return null;
             };
             $(document).ready(function(){
                 var ids = getUrlParam('id');
+                var link_id = getUrlParam('link_id');
+                var terrace = getUrlParam('terrace');
                 $.ajax({
                     data:{ids:ids},
                     type:'post',
@@ -299,6 +321,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
                       $('#xqdian').html(info.shop_name);
                       $('#xqsku').html(info.goods_id);
                       $('#xqtitle').html(info.goods_title);
+                      $('#allzs').attr('href','/business/monitor_echarts?keywords_id=00&id='+ids+'link_id='+link_id+'&terrace='+terrace+'')
                       if(info.terrace=='京东'){
                         $('#ptimg').attr('src','/assets/img/jd.png');
                       }else if(info.terrace=='淘宝' || info.terrace=='天猫'){
@@ -340,9 +363,9 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
                         {field:'pc',title:'电脑端排名',operate: false},
                         {field:'pc_update_time',title:'电脑端更新时间',operate: false},
                         {field:'operate','title':__('Operate'),formatter:function(value,row,index){
-                            var echart =' <a href="javascript:;" class="am-icon-bar-chart"></a> ';
+                            var echart =' <a href="/business/monitor_echarts?keywords_id='+row.id+'&link_id='+row.link_id+'&terrace='+row.terrace+'" class="am-icon-bar-chart"></a> ';
                             var str = ' - ';
-                            var del = '<a href="javascript:;" class="am-icon-trash-o" onclick="deljkbtn('+row.id+')"></a>';
+                            var del = '<a href="javascript:void(0)" class="am-icon-trash-o" onclick="deljkbtn('+row.id+',\''+row.keywords+'\','+row.link_id+')"></a>';
                             return echart+str+del;
                         }}  
                     ]
@@ -375,8 +398,26 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table','echarts'], function 
 				});
             }
             //删除关键词
-            window.deljkbtn = function(ids){
-                alert(ids);
+            window.deljkbtn = function(ids,is_one,link_id){
+                $.ajax({
+                    dataType:'json',
+                    type:'post',
+                    data:{ids:ids,is_one:is_one,link_id:link_id},
+                    url:'/business/del_link',
+                    success:function(res){
+                        if(res.code==1){
+                            if(res.is_false==0){
+                                layer.msg(res.msg);
+                                window.location.href = res.url;
+                            }else{
+                                layer.msg(res.msg);
+                                window.location.reload();
+                            }
+                        }else{
+                            layer.msg(res.msg);
+                        }
+                    }
+                })
             }
             // 为表格绑定事件
             Table.api.bindevent(table);

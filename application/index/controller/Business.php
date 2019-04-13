@@ -21,7 +21,6 @@ class Business extends Frontend
     protected $layout = 'default';
     protected $noNeedLogin = ['*'];
     protected $noNeedRight = ['*'];
-    protected $searchFields = 'express_no,out_order_no,a_mphone';
     public function _initialize()
     {
         parent::_initialize();
@@ -330,15 +329,34 @@ class Business extends Frontend
     public function del_link(Request $request)
     {
         if($request->isPost()){
-            $link_id = input('post.link_id');
-            //删除宝贝
+            $link_id = input('post.link_id');//宝贝id
+            $is_one = input('post.is_one');//关键词
+            $keywords_id = input('post.ids');//关键词id
             $user_id = $this->auth->id;
-            $sql = Db::name('links')->where(['link_id'=>$link_id,'user_id'=>$user_id])->delete();
+            if(!$is_one){
+                //删除宝贝
+                $sql = Db::name('links')->where(['link_id'=>$link_id,'user_id'=>$user_id])->delete();
+                if($sql){
+                    //删除关键词 删除排名记录
+                    $sql_keywords = Db::name('links_keywords')->where(['link_id'=>$link_id,'user_id'=>$user_id])->delete();
+                    $sql_record = Db::name('rank_record')->where(['goods_id'=>$link_id,'user_id'=>$user_id])->delete();
+                    return ['code'=>1,'msg'=>'删除成功'];
+                }else{
+                    return ['code'=>0,'msg'=>'删除失败'];
+                }
+            }
+            $sql = Db::name('links_keywords')->where(['id'=>$keywords_id,'user_id'=>$user_id])->delete();
+            $sql = 1;
             if($sql){
-                //删除关键词 删除排名记录
-                $sql_keywords = Db::name('links_keywords')->where(['link_id'=>$link_id,'user_id'=>$user_id])->delete();
-                $sql_record = Db::name('rank_record')->where(['goods_id'=>$link_id,'user_id'=>$user_id])->delete();
-                return ['code'=>1,'msg'=>'删除成功'];
+                $keywords_num = Db::name('links')->where(['link_id'=>$link_id,'user_id'=>$user_id])->value('keywords_num');
+                $keywords_num = $keywords_num-1;
+                $sql2 = Db::name('links')->where(['link_id'=>$link_id,'user_id'=>$user_id])->update(['keywords_num'=>$keywords_num]);
+                $sql3 = Db::name('rank_record')->where(['keywords'=>$is_one,'user_id'=>$user_id])->delete();
+                if($keywords_num == 0){
+                    $sql4 = Db::name('links')->where(['link_id'=>$link_id,'user_id'=>$user_id])->delete();
+                }
+                $is_false = $keywords_num;
+                return ['code'=>1,'msg'=>'删除成功','is_false'=>$is_false,'url'=>'/business/monitor'];
             }else{
                 return ['code'=>0,'msg'=>'删除失败'];
             }
@@ -694,50 +712,81 @@ class Business extends Frontend
     {
         if($request->isPost()){
             $id = input('post.id');//获取商品的id
-            //查询所有关键词
+            $keywords_id = input('post.keywords_id');//关键词id
             $uid = $this->auth->id;
-            $keywords = Db::name('links_keywords')->where(['for_id'=>$id,'user_id'=>$uid])->field('keywords,link_id')->select();
-            $info = [];
-            foreach($keywords as $key=>$val){
-                $info[$val['keywords']] = Db::name('rank_record')->where(['keywords'=>$val['keywords'],'goods_id'=>$val['link_id'],'user_id'=>$uid])->field('keywords,page,position,add_time')->select();
-            }
-            $base_time = [];
-            foreach($info as $bs=>$bv){
-                foreach($bv as $timeKey=>$timeVal){
-                    $base_time[] = $timeVal['add_time'];
+            $period = input('post.period');
+            $start_time = strtotime('-'.$period.'days',time());
+            $end_time = time();
+            $where['add_time'] = ['between',[$start_time,$end_time]];
+            if($keywords_id =='00'){
+                //查询所有关键词
+                $keywords = Db::name('links_keywords')->where(['for_id'=>$id,'user_id'=>$uid])->field('keywords,link_id')->select();
+                $info = [];
+                foreach($keywords as $key=>$val){
+                    $info[$val['keywords']] = Db::name('rank_record')
+                                                ->where(['keywords'=>$val['keywords'],'goods_id'=>$val['link_id'],'user_id'=>$uid])
+                                                ->where($where)
+                                                ->field('keywords,page,position,add_time')
+                                                ->select();
                 }
-            }
-            asort($base_time);
-            $baseTime = [];
-            foreach($base_time as $sort=>$sVal){
-                $baseTime[] = date('Y-m-d',$sVal); 
-            }
-            $baseTime = array_values(array_unique($baseTime));
-            $data = [];
-            $time = [];
-            foreach($keywords as $index=>$element){
-                for($i=0;$i<count($baseTime);$i++){
-                    $search = Db::name('rank_record')
-                                ->where(['user_id'=>$uid,'keywords'=>$element['keywords'],'goods_id'=>$element['link_id']])
-                                ->where('FROM_UNIXTIME(add_time, "%Y-%m-%d") = "'.$baseTime[$i].'"')
-                                ->field('keywords,page,position,add_time')
-                                ->find();
-                    if($search){
-                        $data[$element['keywords']][] = $search['page']*10+$search['position'];
-                        $time[$element['keywords']][] = date('Y-m-d',$search['add_time']);
-                    }else{
-                        $data[$element['keywords']][] = '';
-                        $time[$element['keywords']][] = $baseTime[$i];
+                $base_time = [];
+                foreach($info as $bs=>$bv){
+                    foreach($bv as $timeKey=>$timeVal){
+                        $base_time[] = $timeVal['add_time'];
                     }
                 }
+                asort($base_time);
+                $baseTime = [];
+                foreach($base_time as $sort=>$sVal){
+                    $baseTime[] = date('Y-m-d',$sVal); 
+                }
+                $baseTime = array_values(array_unique($baseTime));
+                $data = [];
+                $time = [];
+                foreach($keywords as $index=>$element){
+                    for($i=0;$i<count($baseTime);$i++){
+                        $search = Db::name('rank_record')
+                                    ->where(['user_id'=>$uid,'keywords'=>$element['keywords'],'goods_id'=>$element['link_id']])
+                                    ->where('FROM_UNIXTIME(add_time, "%Y-%m-%d") = "'.$baseTime[$i].'"')
+                                    ->field('keywords,page,position,add_time')
+                                    ->find();
+                        if($search){
+                            $data[$element['keywords']][] = $search['page']*10+$search['position'];
+                            $time[$element['keywords']][] = date('Y-m-d',$search['add_time']);
+                        }else{
+                            $data[$element['keywords']][] = '';
+                            $time[$element['keywords']][] = $baseTime[$i];
+                        }
+                    }
+                }
+                $return = [];
+                foreach($data as $key=>$vo){
+                    $return [$key]['data'] = $vo;
+                    $return[$key]['name'] = $key;
+                    $return[$key]['time'] = $time[$key];
+                }
+                return ['code'=>1,'msg'=>'获取成功','info'=>$return];
+            }
+            $keywords = Db::name('links_keywords')->where(['id'=>$keywords_id,'user_id'=>$uid])->field('link_id,keywords')->find();
+            $info = Db::name('rank_record')
+                    ->where(['keywords'=>$keywords['keywords'],'goods_id'=>$keywords['link_id']])
+                    ->where($where)
+                    ->order('add_time asc')
+                    ->field('keywords,page,position,add_time')
+                    ->select();
+            $data = [];
+            $time = [];
+            foreach($info as $index=>$element){
+                $data[$element['keywords']][] = $element['page']*10+$element['position'];
+                $time[$element['keywords']][] = date('Y-m-d',$element['add_time']);
             }
             $return = [];
-            foreach($data as $key=>$vo){
-                $return [$key]['data'] = $vo;
+            foreach($data as $key=>$val){
+                $return[$key]['data'] = $val;
                 $return[$key]['name'] = $key;
                 $return[$key]['time'] = $time[$key];
             }
-            return ['code'=>1,'msg'=>'获取成功','info'=>$return];
+            return ['code'=>1,'获取成功','info'=>$return];
         }
     }
     /**

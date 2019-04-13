@@ -280,7 +280,7 @@ class Crontab extends Controller
                                 ->where(['create_time'=>['between',[$timestart,$timeend]]])
                                 ->find();
                         $n = 1;
-                        echo "未查到记录";
+                        echo "no record";
                     }
                 }else{
                     $items = $data;
