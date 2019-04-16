@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\index.html";i:1551985885;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1553564999;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\index.html";i:1555396841;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555400738;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -72,94 +72,6 @@
                 <i class="am-icon-home sidebar-nav-link-logo"> </i> 用户首页
             </a>
         </li>
-        <!-- <li class="sidebar-nav-link">
-            <a href="javascript:;" class="sidebar-nav-sub-title">
-                <i class="am-icon-plus-square sidebar-nav-link-logo"></i> 发布任务
-            <?php if(in_array((\think\Request::instance()->action()), explode(',',"buy,uploads,tb,jd,pdd,dy,retask,redy"))): ?>
-                <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico sidebar-nav-sub-ico-rotate"></span>
-            </a>
-            <ul class="sidebar-nav sidebar-nav-sub" style="display: block;" >
-            <?php else: ?>
-                <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
-            </a>
-            <ul class="sidebar-nav sidebar-nav-sub" >
-            <?php endif; ?>
-                <li class="sidebar-nav-link">
-                    <a href="/task/tb.html" class="<?php echo $config['actionname']=='tb'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 淘宝任务
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/jd.html" class="<?php echo $config['actionname']=='jd'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 京东任务
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/pdd.html" class="<?php echo $config['actionname']=='pdd'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 拼多多任务
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/dy.html" class="<?php echo $config['actionname']=='dy'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 抖音任务
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/express/buy.html" class="<?php echo $config['actionname']=='buy'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 圆通任务
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/express/uploads.html" class="<?php echo $config['actionname']=='uploads'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 批量下单
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="sidebar-nav-link">
-            <a href="javascript:;" class="sidebar-nav-sub-title">
-                <i class="am-icon-list sidebar-nav-link-logo"></i> 任务记录
-            <?php if(in_array((\think\Request::instance()->action()), explode(',',"exlist,ulist,tblist,jdlist,pddlist,dylist"))): ?>
-                <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico sidebar-nav-sub-ico-rotate"></span>
-            </a>
-            <ul class="sidebar-nav sidebar-nav-sub" style="display: block;" >
-            <?php else: ?>
-                <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
-            </a>
-            <ul class="sidebar-nav sidebar-nav-sub" >
-            <?php endif; ?>
-                <li class="sidebar-nav-link">
-                    <a href="/task/tblist.html?task_tpe=1" class="<?php echo $config['actionname']=='tblist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 淘宝记录
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/jdlist.html?task_tpe=6" class="<?php echo $config['actionname']=='jdlist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 京东记录
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/pddlist.html?task_tpe=10" class="<?php echo $config['actionname']=='pddlist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 拼多多记录
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/dylist.html?task_tpe=12" class="<?php echo $config['actionname']=='dylist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 抖音记录
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/express/exlist.html" class="<?php echo $config['actionname']=='exlist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 单号管理
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/express/ulist.html" class="<?php echo $config['actionname']=='ulist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 导入记录
-                    </a>
-                </li>
-            </ul>
-        </li> -->
         <li class="sidebar-nav-link">
             <a href="javascript:;" class="sidebar-nav-sub-title">
                 <i class="am-icon-user sidebar-nav-link-logo"></i> 用户中心
@@ -178,8 +90,8 @@
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
-                    <a href="/user/score.html" class="<?php echo $config['actionname']=='score'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 资金明细
+                    <a href="/user/money_log.html" class="<?php echo $config['actionname']=='money_log'?'sub-active':''; ?>">
+                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 消费记录
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
@@ -212,7 +124,7 @@
             </a>
         </li>
         <li class="sidebar-nav-link">
-                    <a href="/business/monitor" <?php if(in_array(($config['actionname']), explode(',',"monitor,search,chart"))): ?> class="sub-active" <?php endif; ?>>
+                    <a href="/business/monitor" <?php if(in_array(($config['actionname']), explode(',',"monitor,search,monitor_echarts"))): ?> class="sub-active" <?php endif; ?>>
                         <i class="am-icon-search sidebar-nav-link-logo"></i> 排名监控
                     </a>
                 </li>
@@ -240,12 +152,12 @@
             <div class="am-u-md-3">
                 <div class="widget am-cf">
                     <div class="widget-head am-cf">
-                        <div class="widget-title am-fl">Hi <span class="number"><?php echo $user['username']; ?></span></div>
+                        <div class="widget-title am-fl">Hi <span class="number"><?php echo $userName; ?></span></div>
                     </div>
                     <div class="widget-body am-fr">
                         <div class="am-fl am-cf">
                             <a href="/user/changepwd.html" class="am-btn am-btn-default am-btn-xs"> <i class="am-icon-cog"></i> 个人设置 </a>
-                            <a href="/express/adds.html" class="am-btn am-btn-danger am-btn-xs"> <i class="am-icon-map-marker"></i> 发货地址 </a>
+                            <a href="#" class="am-btn am-btn-danger am-btn-xs"> <i class="am-icon-bell"></i> 通知提醒 </a>
                         </div>
                     </div>
                 </div>
@@ -253,12 +165,12 @@
             <div class="am-u-md-3">
                 <div class="widget am-cf">
                     <div class="widget-head am-cf">
-                        <div class="widget-title am-fl">当前余额：<span class="number"><?php echo $user['money']; ?></span></div>
+                        <div class="widget-title am-fl"><span class="number" id="pm"><?php echo $keywordsNum; ?></span>个关键词监控任务</div>
                     </div>
                     <div class="widget-body am-fr">
                         <div class="am-fl am-cf">
-                            <a href="/user/score.html" class="am-btn am-btn-success am-btn-xs"> <i class="am-icon-search"></i> 查看明细 </a>
-                            <a href="/recharge/recharge.html" class="am-btn am-btn-warning am-btn-xs"> <i class="am-icon-rmb"></i> 立即充值 </a>
+                            <a href="#" class="am-btn am-btn-success am-btn-xs"> <i class="am-icon-search"></i> 查看监控</a>
+                            <a href="#" class="am-btn am-btn-warning am-btn-xs"> <i class="am-icon-plus"></i> 添加监控 </a>
                         </div>
                     </div>
                 </div>
@@ -266,12 +178,12 @@
             <div class="am-u-md-3">
                 <div class="widget am-cf">
                     <div class="widget-head am-cf">
-                        <div class="widget-title am-fl">推荐了：<span class="number"><?php echo $fcoun; ?></span>个用户</div>
+                        <div class="widget-title am-fl"><span class="number" id="jp"><?php echo $competitorNum; ?></span>个竞品监控任务</div>
                     </div>
                     <div class="widget-body am-fr">
                         <div class="am-fl am-cf">
-                            <a href="/user/union.html" class="am-btn am-btn-success am-btn-xs"> <i class="am-icon-search"></i> 推广明细 </a>
-                            <a href="/user/union.html" class="am-btn am-btn-warning am-btn-xs"> <i class="am-icon-group"></i> 我要推广 </a>
+                            <a href="#" class="am-btn am-btn-success am-btn-xs"> <i class="am-icon-search"></i> 查看监控 </a>
+                            <a href="#" class="am-btn am-btn-warning am-btn-xs"> <i class="am-icon-plus"></i> 添加监控 </a>
                         </div>
                     </div>
                 </div>
@@ -279,80 +191,143 @@
             <div class="am-u-md-3">
                 <div class="widget am-cf">
                     <div class="widget-head am-cf">
-                        <div class="widget-title am-fl">您是 <span class="number"><?php echo getlv($user['level'])['name']; ?></span></div>
+                        <div class="widget-title am-fl">您是 <span class="number"><?php echo $level_name; ?></span></div>
                     </div>
                     <div class="widget-body am-fr">
                         <div class="am-fl am-cf">
-                            <a href="/user/score.html" class="am-btn am-btn-default am-btn-xs"> 等级积分:<?php echo $user['score']; ?> </a>
-
+                            <?php if($level_name !='普通会员'): ?><a href="javascript:;" class="am-btn am-btn-default am-btn-xs" id="gdays">到期时间<font color="red"><?php echo $expire_time; ?></font></a><?php endif; ?>
+                            <a href="javascript:void(0)" class="am-btn am-btn-secondary am-btn-xs" data-am-modal="{target:'#buyvip',closeViaDimmer:0,width:600,height:330}"> <i class="am-icon-cny"></i> 购买等级 </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row am-cf">
-            <div class="am-u-md-6">
+            <div class="am-u-md-8">
                 <div class="widget am-cf">
-                    <div class="widget-head am-cf">
-                        <div class="widget-title am-fl">通知/帮助</div>
-                    </div>
-                    <div class="widget-body am-fr">
-                        <ul class="list-unstyled">
-                            <?php if(is_array($newslist) || $newslist instanceof \think\Collection || $newslist instanceof \think\Paginator): $i = 0; $__LIST__ = $newslist;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$nl): $mod = ($i % 2 );++$i;?>
-                            <li><p class="clearfix"><a href="/index/news/ids/<?php echo $nl['id']; ?>" class="pull-left" target="_blank"><?php echo $i; ?>、<?php echo $nl['title']; ?></a><span class="text-muted pull-right"><?php echo date("Y-m-d",$nl['create_time']); ?></span></p></li>
-                            <?php endforeach; endif; else: echo "" ;endif; ?>
-                        </ul>
-                    </div>
-                </div>
-                <div class="widget am-cf">
-                    <div class="widget-head am-cf">
-                        <div class="widget-title am-fl">现在关注我们微信，即可赠送黄金会员等级积分</div>
-                    </div>
-                    <div class="widget-body am-fr" align="center">
-                        <?php if($site['weixinkf'] != '0'): ?>
-                        <img src="/uploads/20190124/3c949287ded4114b6c1d0522b77a9b44.jpg" width="300" height="300">
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-            <div class="am-u-md-6">
-                <div class="widget am-cf">
-                    <div class="widget-head am-fr" style="color: red;">	<?php echo $site['unotice']; ?></div>
+                    <div class="widget-head am-fr">成功邀请一个好友注册可免费增加5天高级会员，可累加</div>
                     <div class="widget-head am-fr">
                         <div class="widget-title am-fl">
-                            <div class="am-panel am-panel-default am-margin-bottom-xs">
-                                <div class="am-panel-bd" id="share"><?php echo $site['tginfo']; ?>。<?php echo $url; ?></div>
-                                <button type="button"  class="am-btn am-btn-danger am-btn-xs divcopy" data-clipboard-action="copy" data-clipboard-target="#share"><i class="am-icon-copy"></i> 点击复制</button>
-                            </div>
+                          <div class="am-panel am-panel-default am-margin-bottom-xs">
+                            <div class="am-panel-bd" id="share">给你推荐一个免费淘宝京东排名查询网站，还有关键词和竞争对手监控功能，都是免费的！<span id="turls">www.kanshuju.com/cha/reg.shtml?tcode=26594384</span></div>
+                            <button type="button" class="am-btn am-btn-danger am-btn-xs divcopy" data-clipboard-action="copy" data-clipboard-target="#share"><i class="am-icon-copy"></i> 点击复制</button>
+                         </div>  
+
                         </div>
+                         
                     </div>
                     <div class="widget-body am-fr">
                         <table class="am-table am-table-striped am-table-bordered am-table-hover am-table-centered">
                             <thead>
-                            <tr>
-                                <th>会员等级</th><th>所需积分</th><th>圆通价格</th>
-                            </tr>
+                                <tr>
+                                    <th>功能</th><th>游客</th><th>普通会员</th><th>高级会员</th><th>VIP会员</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vr): $mod = ($i % 2 );++$i;?>
-                            <tr <?php if($vr['id'] == $user['level']): ?>class="am-active"<?php endif; ?>>
-                            <td><?php echo $vr['name']; ?></td>
-                            <td><?php echo $vr['low_price']; ?></td>
-                            <td><?php echo $vr['yto']; ?></td>
-                            </tr>
-                            <?php endforeach; endif; else: echo "" ;endif; ?>
-                            <tr>
-                                <td colspan="3">积分规则：等级积分等于您的充值金额(如：累计充值500元，等级积分为500)</td>
-                            </tr>
+                                <tr>
+                                    <td>查排名</td>
+                                    <td>10页</td>
+                                    <td>15页</td>
+                                    <td>20页</td>
+                                    <td>100页</td>
+                                </tr>
+                                <tr>
+                                    <td>排名监控</td>
+                                    <td>x</td>
+                                    <td>5个关键词</td>
+                                    <td>15个关键词</td>
+                                    <td>100个关键词</td>
+                                </tr>
+                                <tr>
+                                    <td>竞品监控</td>
+                                    <td>x</td>
+                                    <td>1个商品</td>
+                                    <td>5个商品</td>
+                                    <td>100个商品</td>
+                                     
+                                </tr>
+                                <tr>
+                                    <td>通知方式</td>
+                                    <td>x</td>
+                                    <td>微信</td>
+                                    <td>微信</td>
+                                    <td>微信+短信</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">注：高级会员只能通过推广获得</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
+                      
+                </div>
+            </div>
 
+            <div class="am-u-md-4">
+                <div class="widget am-cf">
+                    <div class="widget-head am-cf">
+                        <div class="widget-title am-fl">通知/帮助</div>
+                    </div>
+                    <div class="widget-body widget-body-md am-fr">
+                        <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more">28% / 100%</span></div>
+                        <div class="am-progress">
+                            <div class="am-progress-bar" style="width: 15%">15%</div>
+                        </div>
+                        <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more">28% / 100%</span></div>
+                        <div class="am-progress">
+                            <div class="am-progress-bar  am-progress-bar-warning" style="width: 75%"></div>
+                        </div>
+                         
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="buyvip">
+    <div class="am-modal-dialog">
+      <div class="am-modal-hd">购买VIP会员
+        <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+      </div>
+      <div class="dialog-body am-fr">
+            <div class="am-form-group cgroup am-fl">
+                 <table class="am-table am-table-striped am-table-hover am-table-centered">
+                          <thead> <tr><th>周期</th><th>高级会员</th><th>VIP会员</th><th>购买VIP</th></tr></thead>
+                          <tbody>
+                              <tr>
+                               <td>一月</td>
+                               <td>推广6人</td>
+                               <td>￥30</td>
+                               <td><button type="button" class="am-btn am-btn-success am-btn-xs" data-am-modal="{target:'#payimg',closeViaDimmer:1,width:300,height:300}" onclick="bvip('1')"><i class="am-icon-weixin"></i> 支付</button></td>
+                              </tr>
+                              <tr>
+                               <td>三月</td>
+                               <td>推广18人</td>
+                               <td>￥80</td>
+                               <td> <button type="button" class="am-btn am-btn-success am-btn-xs" data-am-modal="{target:'#payimg',closeViaDimmer:1,width:300,height:300}" onclick="bvip('2')"><i class="am-icon-cny"></i> 支付宝购买</button></td>
+                              </tr>
+                              <tr>
+                               <td>半年</td>
+                               <td>推广36人</td>
+                               <td>￥160</td>
+                               <td> <button type="button" class="am-btn am-btn-success am-btn-xs" data-am-modal="{target:'#payimg',closeViaDimmer:1,width:300,height:300}" onclick="bvip('3')"><i class="am-icon-cny"></i> 支付宝购买</button> </td>			 
+                              </tr>
+                              <tr>
+                               <td>一年</td>
+                               <td>推广73人</td>
+                               <td>￥300</td>
+                               <td> <button type="button" class="am-btn am-btn-success am-btn-xs" data-am-modal="{target:'#payimg',closeViaDimmer:1,width:300,height:300}" onclick="bvip('4')"><i class="am-icon-cny"></i> 支付宝购买</button> </td>
+                              </tr>
+                              <tr>
+                               <td colspan="4">注：高级会员只能通过推广获得，推荐1人奖励5天高级会员，可累加</td>
+                              </tr>
+                          </tbody>
+              </table>        
+            </div>
+             
+      </div>
+    </div>
+  </div>
 <script src="/assets/com/clipboard.min.js"></script>
 <script>
     var clipboard = new ClipboardJS('.divcopy');

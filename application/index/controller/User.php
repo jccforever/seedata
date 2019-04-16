@@ -9,6 +9,7 @@ use think\Hook;
 use think\Session;
 use think\Validate;
 use think\Db;
+use think\Request;
 /**
  * 会员中心
  */
@@ -16,7 +17,7 @@ class User extends Frontend
 {
 
     protected $layout = 'default';
-    protected $noNeedLogin = ['login', 'register', 'third'];
+    protected $noNeedLogin = ['login', 'register', 'third','async_callback'];
     protected $noNeedRight = ['*'];
 
     public function _initialize()
@@ -69,17 +70,20 @@ class User extends Frontend
      */
     public function index()
     {
-		$data = Db::name('user_level')->where('status',1)->select();
-		$newslist = Db::name('news')->where('category_id',0)->order('id desc')->limit(6)->select();
-		$fcoun = model('user')->where('friendid',$this->auth->id)->count();
-        $tcode = $this->auth->id.mt_rand(1000, 9999);
-        $url = 'http://'.$_SERVER['SERVER_NAME'].'/user/register.html?fcode='.$tcode;
-
-        $this->view->assign('title', __('User center'));
-		$this->view->assign('list', $data);
-		$this->view->assign('newslist', $newslist);
-        $this->view->assign('fcoun', $fcoun);
-        $this->view->assign('url', $url);
+        $user = $this->auth->username;
+        $uid = $this->auth->id;
+        $keywords_num = Db::name('links_keywords')->where('user_id',$uid)->count('keywords');
+        $competitor_num = Db::name('competitor')->where('user_id',$uid)->count('competitor_url');
+        $user_level = Db::name('user')->where('id',$uid)->field('level,expire_time')->find();
+        $level_name = Db::name('user_level')->where('id',$user_level['level'])->value('level_name');
+        // $time = timediff(time(),$user_level['expire_time']);
+        // $expire_time = $time['day'].'天'.$time['hour'].'时'.$time['min'].'分'.$time['sec'].'秒';
+        $expire_time = date('Y-m-d',$user_level['expire_time']);
+        $this->assign('userName',$user);
+        $this->assign('keywordsNum',$keywords_num);
+        $this->assign('competitorNum',$competitor_num);
+        $this->assign('level_name',$level_name);
+        $this->assign('expire_time',$expire_time);
         return $this->view->fetch();
     }
 
@@ -132,7 +136,7 @@ class User extends Frontend
             if (!$result) {
                 $this->error(__($validate->getError()), null, ['token' => $this->request->token()]);
             }
-            if ($this->auth->register($username, $password, $email, $mobile,['friendid'=>$friendid])) {
+            if ($this->auth->register($username, $password, $email, $mobile,['friendid'=>$friendid,'level'=>2])) {
                 $synchtml = '';
                 ////////////////同步到Ucenter////////////////
                 if (defined('UC_STATUS') && UC_STATUS) {
@@ -293,10 +297,12 @@ class User extends Frontend
         $this->view->assign('title', __('Change password'));
         return $this->view->fetch();
     }
-	 /**
- * 积分记录
- */
-    public function score()
+    /**
+     * 消费记录
+     *
+     * @return void
+     */
+    public function money_log()
     {
         //设置过滤方法
         $this->request->filter(['strip_tags']);
@@ -306,12 +312,12 @@ class User extends Frontend
                 return $this->selectpage();
             }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
-            $total = model('score_log')
+            $total = Db::name('user_money_log')
                 ->where($where)
                 ->order($sort, $order)
                 ->count();
 
-            $list = model('score_log')
+            $list = Db::name('user_money_log')
                 ->where($where)
                 ->order($sort, $order)
                 ->limit($offset, $limit)
@@ -341,5 +347,102 @@ class User extends Frontend
 
         $this->assign('url', $url);
         return $this->view->fetch();
+    }
+    /**
+     * 会员充值
+     */
+    public function pay(Request $request)
+    {
+        if($request->isPost()){
+            $ids = input('post.ids');//产品id
+            $secretkey = '123456';//秘钥
+            $user_id = $this->auth->id;
+            $vip_info = Db::name('vip_price')->where('id',$ids)->find();
+            $expire_time = $vip_info['duration_time'];//过期时间
+            $price = $vip_info['price'];//价格
+            $pay_type = $vip_info['pay_type'];//付款方式
+            $returnurl = "http://sd.com/user/index";
+            $notifyurl = "http://sd.com/user/async_callback";//异步回调地址
+            $extend = $user_id.','.$ids;//额外参数
+            $out_order_id = date('Ymdhis',time()).rand(100,999).$user_id;//第三方单号
+            $product_id = '';
+            $format = 'html';
+            $sign = md5(md5($price . $out_order_id . 'alipay' .$product_id. $notifyurl . $returnurl . $extend) . $secretkey);
+            $params = [
+                'price'        => $price,
+                'out_order_id' => $out_order_id,
+                'type'         => 'alipay',
+                'product_id'   => $product_id,
+                'notifyurl'    => $notifyurl,
+                'returnurl'    => $returnurl,
+                'extend'       => $extend,
+                'sign'         => $sign,
+                'format'       => $format,
+            ];
+            $url = "/addons/pay/api/create"."?".http_build_query($params);
+            return ['code'=>1,'msg'=>'OK','url'=>$url];
+        }    
+    }
+    /**
+     * 异步回调通知
+     */
+    public function async_callback(Request $request)
+    {
+        if($request->isPost()){
+            $order_id = $this->request->request('order_id', '');//订单号
+            $out_order_id = $this->request->request('out_order_id', '');//外部订单号
+            $price = $this->request->request('price', '');//订单价格
+            $realprice = $this->request->request('realprice', '');//真是付款价格
+            $type = $this->request->request('type', '');//交易类型
+            $paytime = $this->request->request('paytime', '');//付款时间
+            $extend = $this->request->request('extend', '');//业务参数
+            $sign = $this->request->request('sign', '');//签名
+            $secretkey = '123456';
+            if ($sign != md5(md5($order_id . $out_order_id . $price . $realprice . $type . $paytime . $extend) . $secretkey)) {
+                $this->error('签名错误了！');
+            }
+            //处理业务
+            $extend = explode(',',$extend);
+            $user_id = $extend[0];//用户id
+            $vip_price_id = $extend[1];//会员价格id
+            //会员价格信息
+            $vip_info = Db::name('vip_price')->where('id',$vip_price_id)->find();
+            $duration_time = strtotime($vip_info['date']);//会员时长
+            $level = $vip_info['level_id'];//会员等级
+            //用户信息
+            $user_info = Db::name('user')->where('id',$user_id)->find();
+            $user_level = $user_info['level'];//用户等级
+            $expire_time = $user_info['expire_time'];//过期时间
+            if($user_level==3){
+                $expire_time = 0;
+            }
+            if($user_level==4 || $user_level==2){
+                if($expire_time-time()>10){
+                    $expire_time = $expire_time-time();
+                    $expire_time = $expire_time+$duration_time;
+                }else{
+                    $expire_time = 0;
+                    $expire_time = $duration_time;
+                }
+            }
+            $update = [
+                'id'=>$user_id,
+                'level'=>$level,
+                'expire_time'=>$expire_time
+            ];
+            //更新用户信息
+            $sql_update = Db::name('user')->update($update);
+            //写入消费记录
+            $insert = [
+                'user_id'=>$user_id,
+                'money'=>$price,
+                'memo'=>'购买了'.$vip_info['duration_time'].'vip会员',
+                'createtime'=>time()
+            ];
+            $sql_insert = Db::name('user_money_log')->insert($insert);
+            echo "success";
+        }else{
+            echo '不是post';
+        }
     }
 }

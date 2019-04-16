@@ -97,12 +97,12 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table'], function ($, undefi
                 });
             });
         },
-	   score: function () {
+	   money_log: function () {
              // 初始化表格参数配置
             Table.api.init({
                 extend: {
-                    index_url: 'user/score',
-                    table: 'user_score_log',
+                    index_url: 'user/money_log',
+                    table: 'user_money_log',
                 }
             });
 		   var table = $("#table");
@@ -114,38 +114,33 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table'], function ($, undefi
 				showExport: false,
                 columns: [
                     [
-                        {field: 'score', title: '变动金额'},
-						{field: 'before', title: '类型', searchList: {"0":__('减少'),"1":__('增加'),"2":__('奖励')}, formatter: Table.api.formatter.normal},
-                        {field: 'after', title: '变动后余额'},
+                        {field:'id','title':'#'},
+                        {field: 'money', title: '充值金额'},
                         {field: 'memo', title: __('Memo')},
-                        {field: 'createtime', title: __('Createtime'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime}
+                        {field: 'createtime', title:'充值时间', operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime}
                          
                     ]
                 ]
             });
-             
-		     // 绑定TAB事件
-            $('.panel-heading a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                var field = $(this).closest("ul").data("field");
-                var value = $(this).data("value");
-                var options = table.bootstrapTable('getOptions');
-                options.pageNumber = 1;
-                options.queryParams = function (params) {
-                    var filter = {};
-                    if (value !== '') {
-                        filter[field] = value;
-                    }
-                    params.filter = JSON.stringify(filter);
-                    return params;
-                };
-                table.bootstrapTable('refresh', {});
-                return false;
-            });
-		   
             // 为表格绑定事件
             Table.api.bindevent(table);
         },
-		
+        index:function(){
+            window.bvip = function(ids){
+                $.ajax({
+                    data:{ids:ids},
+                    dataType:'json',
+                    type:'post',
+                    url:'/user/pay',//线上支付
+                    // url:'/user/simulate_pay',
+                    success:function(res){
+                        if(res.code==1){
+                            location.href = res.url;
+                        }
+                    }
+                })
+            }
+        }
     };
     return Controller;
 });

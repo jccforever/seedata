@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\score.html";i:1548230529;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1552638175;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\score.html";i:1555399478;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555036733;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -233,12 +233,12 @@
             </a>
         </li>
         <li class="sidebar-nav-link">
-                    <a href="/Business/monitor" class="<?php echo $config['actionname']=='monitor'?'sub-active':''; ?>">
+                    <a href="/business/monitor" <?php if(in_array(($config['actionname']), explode(',',"monitor,search,monitor_echarts"))): ?> class="sub-active" <?php endif; ?>>
                         <i class="am-icon-search sidebar-nav-link-logo"></i> 排名监控
                     </a>
                 </li>
         <li class="sidebar-nav-link">
-            <a href="#">
+            <a href="/business/contend"  <?php if(in_array(($config['actionname']), explode(',',"contend,contend_detail"))): ?> class="sub-active" <?php endif; ?>>
                 <i class="am-icon-line-chart sidebar-nav-link-logo"></i> 竞品监控
             </a>
         </li>
@@ -258,16 +258,7 @@
     <div class="row-content am-cf">
         <div class="row am-cf">
             <div class="am-u-sm-12 am-u-md-12">
-                <div class="panel-heading" style="padding-bottom: 0; padding-left: 15px;">
-                    <ul class="nav nav-tabs" data-field="before">
-                        <li class="active"><a href="#t-all" data-value="" data-toggle="tab" aria-expanded="true">全部</a></li>
-                        <li class=""><a href="#t-1" data-value="0" data-toggle="tab" aria-expanded="false">减少</a></li>
-                        <li><a href="#t-0" data-value="1" data-toggle="tab">增加</a></li>
-                        <li><a href="#t-2" data-value="2" data-toggle="tab">奖励</a></li>
-                    </ul>
-                </div>
                 <div class="widget am-cf">
-
                     <div class="widget-body am-fr">
                         <div id="toolbar" class="toolbar">
                             <a href="javascript:;" class="btn btn-primary btn-refresh" title="<?php echo __('Refresh'); ?>" ><i class="fa fa-refresh"></i> </a>

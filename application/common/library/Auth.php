@@ -158,8 +158,6 @@ class Auth
             'password' => $password,
             'email'    => $email,
             'mobile'   => $mobile,
-            'level'    => 1,
-            'score'    => 0,
             'avatar'   => '',
         ];
         $params = array_merge($data, [

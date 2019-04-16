@@ -9,7 +9,7 @@ return array (
     'content' => 
     array (
     ),
-    'value' => 'exdejni',
+    'value' => '123456',
     'rule' => 'required',
     'msg' => '',
     'tip' => '用于客户端和API通信加密',

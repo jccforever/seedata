@@ -12,10 +12,6 @@ return array (
     array (
       0 => 'pay',
     ),
-    'user_sidenav_after' => 
-    array (
-      0 => 'recharge',
-    ),
     'sms_send' => 
     array (
       0 => 'rlsms',
