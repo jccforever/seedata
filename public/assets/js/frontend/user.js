@@ -132,7 +132,6 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table'], function ($, undefi
                     dataType:'json',
                     type:'post',
                     url:'/user/pay',//线上支付
-                    // url:'/user/simulate_pay',
                     success:function(res){
                         if(res.code==1){
                             location.href = res.url;

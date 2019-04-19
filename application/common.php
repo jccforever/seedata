@@ -643,3 +643,121 @@ if(!function_exists('timediff')){
         return $res;
     }
 }
+if(!function_exists('get_user_access')){
+    function get_user_access($level){
+        $info = Db::name('user_level')->where('id',$level)->find();
+        return $info;
+    }
+}
+//会员权限
+if(!function_exists('get_right_control')){
+    function get_right_control($level,$exists,$upper_limit,$common_upper_limit,$time,$expire_time){
+        if($level==2){
+            if($exists>=$upper_limit){
+                return $is_add = 0;
+            }else{
+                return $is_add = 1;
+            }
+        }
+        if($level==3 || $level==4){
+            if($expire_time-$time<10){
+                if($exists>=$common_upper_limit){
+                    return ['is_add'=>0,'is_expire_time'=>1];
+                }else{
+                    return $is_add = 1;
+                }
+            }else{
+                if($exists>=$upper_limit){
+                    return $is_add = 0;
+                }else{
+                    return $is_add = 1;
+                }
+            }
+        }
+    }
+}
+if (!function_exists('postMulti')) {
+
+    /**
+     * 发送请求post
+     * @param string $url
+     * @param array $nodes 缩进字符
+     * @return string
+     */
+    function postMulti($nodes,$timeOut = 5)
+    {
+        try 
+        {
+            if (false == is_array($nodes)) 
+            {
+                return array();
+            }
+ 
+            $mh = curl_multi_init(); 
+            $curlArray = array();
+            foreach($nodes as $key => $info)
+            {
+                if(false == is_array($info))
+                {
+                    continue;
+                }
+                if(false == isset($info['url']))
+                {
+                    continue;
+                }
+ 
+                $ch = curl_init();
+                // 设置url
+                $url = $info['url'];
+                curl_setopt($ch, CURLOPT_URL, $url);
+ 
+                $data = isset($info['data']) ? $info['data'] :null;
+                if(false == empty($data))
+                {
+                    curl_setopt($ch, CURLOPT_POST, 1); 
+                    // array
+                    if (is_array($data) && count($data) > 0) 
+                    {
+                        curl_setopt($ch, CURLOPT_POST, count($data));                
+                    }
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+                }
+ 
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+                // 如果成功只将结果返回，不自动输出返回的内容
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                // user-agent
+                curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0");
+                // 超时
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeOut);
+                
+                $curlArray[$key] = $ch;
+                curl_multi_add_handle($mh, $curlArray[$key]); 
+            }
+ 
+            $running = NULL; 
+            do { 
+                usleep(10000); 
+                curl_multi_exec($mh,$running); 
+            } while($running > 0); 
+ 
+            $res = array(); 
+            foreach($nodes as $key => $info) 
+            { 
+                $res[$key] = curl_multi_getcontent($curlArray[$key]); 
+            } 
+            foreach($nodes as $key => $info){ 
+                curl_multi_remove_handle($mh, $curlArray[$key]); 
+            } 
+            curl_multi_close($mh);     
+            return $res;
+        } 
+        catch ( Exception $e ) 
+        {
+            return array();
+        }
+ 
+        return array();
+    }
+}

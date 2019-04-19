@@ -49,7 +49,7 @@
                     </div>
                     <div class="widget-body am-fr">
                         <div class="am-fl am-cf">
-                            {if $level_name !='普通会员'}<a href="javascript:;" class="am-btn am-btn-default am-btn-xs" id="gdays">到期时间<font color="red">{$expire_time}</font></a>{/if}
+                            <a href="javascript:;" class="am-btn am-btn-default am-btn-xs" id="gdays">到期时间<font color="red">{if $level_name !='普通会员'}{$expire_time}{else/} 永久{/if}</font></a>
                             <a href="javascript:void(0)" class="am-btn am-btn-secondary am-btn-xs" data-am-modal="{target:'#buyvip',closeViaDimmer:0,width:600,height:330}"> <i class="am-icon-cny"></i> 购买等级 </a>
                         </div>
                     </div>

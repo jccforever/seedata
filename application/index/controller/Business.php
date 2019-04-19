@@ -19,7 +19,7 @@ class Business extends Frontend
 {
 
     protected $layout = 'default';
-    protected $noNeedLogin = ['*'];
+    protected $noNeedLogin = ['taobao','get_tb','jingdong','get_jd'];
     protected $noNeedRight = ['*'];
     public function _initialize()
     {
@@ -42,6 +42,8 @@ class Business extends Frontend
      */
     public function taobao()
     {
+        $user_id = $this->auth->id;
+        $level = $this->auth->level;
         return $this->view->fetch();
     }
     /**
@@ -67,9 +69,39 @@ class Business extends Frontend
             }else{
                 return ['code'=>0,'msg'=>'请输入合法的宝贝链接','leadTime'=>''];
             }
+            $level = $this->auth->level;
+            $user_id = $this->auth->id;
+            $expire_time = $this->auth->expire_time;
+            $time = time();
+            //判断是否是游客
+            if(!isset($user_id)){
+                //页码差值 10页
+                if($end_page-$start_page>10){
+                    return ['code'=>0,'msg'=>'游客模式最多只能查10页','leadTime'=>''];
+                }
+            }
+            $level_name = get_user_access($level)['level_name'];
+            $exists = ($end_page-$start_page)+1;
+            $upper_limit = Db::name('user_level')->where('id',$level)->value('page');
+            $common_upper_limit = Db::name('user_level')->where('id',2)->value('page');
+            if($level==2){
+                if($upper_limit<$exists){
+                    return ['code'=>0,'msg'=>'您是'.$level_name.'最多只能查询'.$upper_limit.'页','leadTime'=>''];
+                }
+            }
+            if($level==3 || $level==4){
+                if($expire_time-$time<10){
+                    if($exists>$common_upper_limit){
+                        return ['code'=>0,'msg'=>'您的'.$level_name.'已经过期,最多查询'.$common_upper_limit.'页','leadTime'=>''];
+                    }
+                }
+                if($exists>$upper_limit){
+                    return ['code'=>0,'msg'=>'您是'.$level_name.'最多只能查询'.$upper_limit.'页','leadTime'=>''];
+                }
+            }
             $t1 = microtime(true);
             //请求淘宝接口
-            for($i=$start_page;$i<=$end_page;$i+=2){
+            for($i=$start_page;$i<=$end_page;$i+=5){
                 $json = '';
                 $json = $this->DxApi($keywords,$link_id,$i);
                 if(is_string($json)){
@@ -85,7 +117,7 @@ class Business extends Frontend
             $t2 = microtime(true);
             $leadTime = '耗时'.round($t2-$t1,3).'秒';
             if(empty($items)){
-                return ['code'=>0,'msg'=>'共查询了'.$end_page.'页,未找到相应宝贝的排名','leadTime'=>$leadTime];
+                return ['code'=>0,'msg'=>'共查询了'.($exists).'页,未找到相应宝贝的排名','leadTime'=>$leadTime];
             }
             $items = $items[0];
             return ['code'=>1,'msg'=>'ok','info'=>$items];
@@ -117,10 +149,40 @@ class Business extends Frontend
             }else{
                 return ['code'=>0,'msg'=>'请输入合法的宝贝链接','leadTime'=>''];
             }
+            $level = $this->auth->level;
+            $user_id = $this->auth->id;
+            $expire_time = $this->auth->expire_time;
+            $time = time();
+            //判断是否是游客
+            if(!isset($user_id)){
+                //页码差值 10页
+                if($end_page-$start_page>10){
+                    return ['code'=>0,'msg'=>'游客模式最多只能查10页','leadTime'=>''];
+                }
+            }
+            $level_name = get_user_access($level)['level_name'];
+            $exists = ($end_page-$start_page)+1;
+            $upper_limit = Db::name('user_level')->where('id',$level)->value('page');
+            $common_upper_limit = Db::name('user_level')->where('id',2)->value('page');
+            if($level==2){
+                if($upper_limit<$exists){
+                    return ['code'=>0,'msg'=>'您是'.$level_name.'最多只能查询'.$upper_limit.'页','leadTime'=>''];
+                }
+            }
+            if($level==3 || $level==4){
+                if($expire_time-$time<10){
+                    if($exists>$common_upper_limit){
+                        return ['code'=>0,'msg'=>'您的'.$level_name.'已经过期,最多查询'.$common_upper_limit.'页','leadTime'=>''];
+                    }
+                }
+                if($exists>$upper_limit){
+                    return ['code'=>0,'msg'=>'您是'.$level_name.'最多只能查询'.$upper_limit.'页','leadTime'=>''];
+                }
+            }
             //请求京东接口
             $arr = $this->jdApi($keywords,$link_id);
             if(empty($arr)){
-                return ['code'=>0,'msg'=>'共查询了'.$end_page.'页,未找到相应宝贝的排名','leadTime'=>''];
+                return ['code'=>0,'msg'=>'共查询了'.($end_page-$start_page).'页,未找到相应宝贝的排名','leadTime'=>''];
             }
             $goods_title = $arr['Content']['warename'];//商品标题
             $goods_img = '//img13.360buyimg.com/n1/s450x450_'.$arr['Content']['imageurl'];//商品主图
@@ -160,6 +222,25 @@ class Business extends Frontend
             $result = array("total" => $total, "rows" => $list);
             return json($result);
         }
+        $user_id = $this->auth->id;
+        $level = $this->auth->level;
+        $expire_time = $this->auth->expire_time;
+        $time = time();
+        $exists = Db::name('links_keywords')->where('user_id',$user_id)->count('keywords');
+        $upper_limit = Db::name('user_level')->where('id',$level)->value('monitor_crontab');
+        $common_upper_limit = Db::name('user_level')->where('id',2)->value('monitor_crontab');
+        $level_name = Db::name('user_level')->where('id',$level)->value('level_name');
+        $return  = get_right_control($level,$exists,$upper_limit,$common_upper_limit,$time,$expire_time);
+        if(is_array($return)){
+            $this->assign('is_expire_time',$return['is_expire_time']);
+            $this->assign('is_add',$return['is_add']);
+        }else{
+            $this->assign('is_add',$return);
+        }
+        $this->assign('level_name',$level_name);
+        $this->assign('keywords_num',$upper_limit);
+        $this->assign('exists_keywords',$exists);
+        $this->assign('level',$level);
         $this->assign('title', '排名监控');
         return $this->view->fetch();
     }
@@ -392,6 +473,25 @@ class Business extends Frontend
             $result = array("total" => $total, "rows" => $list);
             return json($result);
         }
+        $user_id = $this->auth->id;
+        $level = $this->auth->level;
+        $expire_time = $this->auth->expire_time;
+        $time = time();
+        $exists = Db::name('links_keywords')->where('user_id',$user_id)->count('keywords');
+        $upper_limit = Db::name('user_level')->where('id',$level)->value('monitor_crontab');
+        $common_upper_limit = Db::name('user_level')->where('id',2)->value('monitor_crontab');
+        $level_name = Db::name('user_level')->where('id',$level)->value('level_name');
+        $return  = get_right_control($level,$exists,$upper_limit,$common_upper_limit,$time,$expire_time);
+        if(is_array($return)){
+            $this->assign('is_expire_time',$return['is_expire_time']);
+            $this->assign('is_add',$return['is_add']);
+        }else{
+            $this->assign('is_add',$return);
+        }
+        $this->assign('level_name',$level_name);
+        $this->assign('keywords_num',$upper_limit);
+        $this->assign('exists_keywords',$exists);
+        $this->assign('level',$level);
         $link_id = input('get.link_id');
         $this->assign('link_id',$link_id);
         $this->assign('title', '排名详情');
@@ -426,6 +526,27 @@ class Business extends Frontend
             $keywords = explode(',',$string);
             if(empty($keywords)) return ['code'=>0,'msg'=>'关键词不能为空'];
             $count = count($keywords);
+            //获取会员等级
+            $level = $this->auth->level;
+            $user_id = $this->auth->id;
+            $time = time();
+            $expire_time = $this->auth->expire_time;
+            $exists = Db::name('links_keywords')->where('user_id',$user_id)->count('keywords');
+            $upper_limit = Db::name('user_level')->where('id',$level)->value('monitor_crontab');
+            $common_upper_limit = Db::name('user_level')->where('id',2)->value('monitor_crontab');
+            $level_name = Db::name('user_level')->where('id',$level)->value('level_name');
+            if($level !=2){
+                if($expire_time-$time<10){
+                    if($exists+$count>$common_upper_limit){
+                        $residue_num = $common_upper_limit-$exists;
+                        return ['code'=>0,'msg'=>'您的'.$level_name.'已过期,还能添加'.$residue_num.'个关键词'];
+                    }
+                }
+            }
+            if($exists+$count>$upper_limit){
+                $residue_num = $upper_limit-$exists;
+                return ['code'=>0,'msg'=>'您是'.$level_name.'还能添加'.$residue_num.'个关键词'];
+            }
             $insert = [];
             foreach($keywords as $key=>$val){
                 $insert[$key]['link_id'] = $link_id;
@@ -474,6 +595,25 @@ class Business extends Frontend
             $result = array("total" => $total, "rows" => $list);
             return json($result);
         }
+        $user_id = $this->auth->id;
+        $level = $this->auth->level;
+        $time = time();
+        $expire_time = $this->auth->expire_time;
+        $exists = Db::name('competitor')->where('user_id',$user_id)->count('competitor_url');
+        $upper_limit = Db::name('user_level')->where('id',$level)->value('contend_crontab');
+        $common_upper_limit = Db::name('user_level')->where('id',2)->value('contend_crontab');
+        $level_name = Db::name('user_level')->where('id',$level)->value('level_name');
+        $return  = get_right_control($level,$exists,$upper_limit,$common_upper_limit,$time,$expire_time);
+        if(is_array($return)){
+            $this->assign('is_expire_time',$return['is_expire_time']);
+            $this->assign('is_add',$return['is_add']);
+        }else{
+            $this->assign('is_add',$return);
+        }
+        $this->assign('level_name',$level_name);
+        $this->assign('limit_contender',$upper_limit);
+        $this->assign('exists_contender',$exists);
+        $this->assign('level',$level);
         return $this->view->fetch();
     }
     /**
@@ -811,7 +951,7 @@ class Business extends Frontend
             'q'=>$keywords,
             'goodid'=>$goods_id,
             'startpage'=>$startpage,
-            'pagestep'=>2
+            'pagestep'=>5
         );
         //生成签名
         $sign = $this->createSign($paramArr);

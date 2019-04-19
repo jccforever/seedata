@@ -68,35 +68,35 @@
                                 <label class="am-u-sm-2 am-form-label">范围:</label>
                                 <div class="am-u-sm-10">
                                     <div class="shao-input-group">
-                                        <input type="text" class="shao-input-bg" name="page1" value="1">
+                                        <input type="text" class="shao-input-bg" name="page1" value="1" data-rule="required;digits;range[1~99]">
                                     </div> 
                                     <div class="shao-input-d">
                                         到
                                     </div>
                                     <div class="shao-input-group">
-                                        <input type="text" class="shao-input-bg" name="page2" value="15"> 
+                                        <input type="text" class="shao-input-bg" name="page2" value="15" data-rule="required;digits;range[2~100]"> 
                                     </div>
-                                    <div class="shao-input-d">
+                                    <div class="shao-input-d" id="notice">
                                         <i class="am-btn am-btn-secondary am-btn-sm am-round am-icon-question" data-am-popover="{content: '游客最大查询10页、普通会员15页、高级会员20页、VIP会员100页',trigger: 'hover focus'}"></i>
                                     </div>
                                 </div>
                             </div>
                             <div class="am-form-group am-fl">
                                 <label class="am-u-sm-2 am-form-label">关键词:</label>
-                                <div class="am-u-sm-10">
-                                    <input type="text" class="tpl-form-input" name="keys" placeholder="请输入您需要查询的关键词">
+                                <div class="am-u-sm-10" id="keywords">
+                                    <input type="text" class="tpl-form-input" name="keys" placeholder="请输入您需要查询的关键词" data-rule="required">
                                 </div>
                             </div>
-                            <div class="am-form-group am-fl">
+                            <div class="am-form-group am-fl" id="url">
                                 <label class="am-u-sm-2 am-form-label" id="jdptls">商品链接:</label>
                                 <div class="am-u-sm-10">
-                                    <input type="text" class="tpl-form-input" name="surl"  id="jdtips" placeholder="输入商品链接或者商品SKU">
+                                    <input type="text" class="tpl-form-input" name="surl"  id="jdtips" placeholder="输入商品链接或者商品SKU" data-rule="required">
                                 </div>
                             </div>
                             <div class="am-form-group am-fl">
                                 <label class="am-u-sm-2 am-form-label"> </label>
                                 <div class="am-u-sm-10">
-                                    <button type="submit" id="tbchaxun" class="am-btn am-btn-primary am-radius">提交查询</button>
+                                    <button type="submit" id="jdchaxun" class="am-btn am-btn-primary am-radius">提交查询</button>
                                 </div>
                             </div>
                         </form>

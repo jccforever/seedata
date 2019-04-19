@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\index.html";i:1555396841;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555400738;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\index.html";i:1555471693;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555400738;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -195,7 +195,7 @@
                     </div>
                     <div class="widget-body am-fr">
                         <div class="am-fl am-cf">
-                            <?php if($level_name !='普通会员'): ?><a href="javascript:;" class="am-btn am-btn-default am-btn-xs" id="gdays">到期时间<font color="red"><?php echo $expire_time; ?></font></a><?php endif; ?>
+                            <a href="javascript:;" class="am-btn am-btn-default am-btn-xs" id="gdays">到期时间<font color="red"><?php if($level_name !='普通会员'): ?><?php echo $expire_time; else: ?> 永久<?php endif; ?></font></a>
                             <a href="javascript:void(0)" class="am-btn am-btn-secondary am-btn-xs" data-am-modal="{target:'#buyvip',closeViaDimmer:0,width:600,height:330}"> <i class="am-icon-cny"></i> 购买等级 </a>
                         </div>
                     </div>

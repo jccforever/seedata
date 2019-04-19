@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:65:"E:\seedata\public/../application/index\view\business\contend.html";i:1553238154;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1553564999;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:65:"E:\seedata\public/../application/index\view\business\contend.html";i:1555557777;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555400738;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -72,94 +72,6 @@
                 <i class="am-icon-home sidebar-nav-link-logo"> </i> 用户首页
             </a>
         </li>
-        <!-- <li class="sidebar-nav-link">
-            <a href="javascript:;" class="sidebar-nav-sub-title">
-                <i class="am-icon-plus-square sidebar-nav-link-logo"></i> 发布任务
-            <?php if(in_array((\think\Request::instance()->action()), explode(',',"buy,uploads,tb,jd,pdd,dy,retask,redy"))): ?>
-                <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico sidebar-nav-sub-ico-rotate"></span>
-            </a>
-            <ul class="sidebar-nav sidebar-nav-sub" style="display: block;" >
-            <?php else: ?>
-                <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
-            </a>
-            <ul class="sidebar-nav sidebar-nav-sub" >
-            <?php endif; ?>
-                <li class="sidebar-nav-link">
-                    <a href="/task/tb.html" class="<?php echo $config['actionname']=='tb'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 淘宝任务
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/jd.html" class="<?php echo $config['actionname']=='jd'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 京东任务
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/pdd.html" class="<?php echo $config['actionname']=='pdd'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 拼多多任务
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/dy.html" class="<?php echo $config['actionname']=='dy'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 抖音任务
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/express/buy.html" class="<?php echo $config['actionname']=='buy'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 圆通任务
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/express/uploads.html" class="<?php echo $config['actionname']=='uploads'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 批量下单
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="sidebar-nav-link">
-            <a href="javascript:;" class="sidebar-nav-sub-title">
-                <i class="am-icon-list sidebar-nav-link-logo"></i> 任务记录
-            <?php if(in_array((\think\Request::instance()->action()), explode(',',"exlist,ulist,tblist,jdlist,pddlist,dylist"))): ?>
-                <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico sidebar-nav-sub-ico-rotate"></span>
-            </a>
-            <ul class="sidebar-nav sidebar-nav-sub" style="display: block;" >
-            <?php else: ?>
-                <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
-            </a>
-            <ul class="sidebar-nav sidebar-nav-sub" >
-            <?php endif; ?>
-                <li class="sidebar-nav-link">
-                    <a href="/task/tblist.html?task_tpe=1" class="<?php echo $config['actionname']=='tblist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 淘宝记录
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/jdlist.html?task_tpe=6" class="<?php echo $config['actionname']=='jdlist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 京东记录
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/pddlist.html?task_tpe=10" class="<?php echo $config['actionname']=='pddlist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 拼多多记录
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/task/dylist.html?task_tpe=12" class="<?php echo $config['actionname']=='dylist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 抖音记录
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/express/exlist.html" class="<?php echo $config['actionname']=='exlist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 单号管理
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/express/ulist.html" class="<?php echo $config['actionname']=='ulist'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 导入记录
-                    </a>
-                </li>
-            </ul>
-        </li> -->
         <li class="sidebar-nav-link">
             <a href="javascript:;" class="sidebar-nav-sub-title">
                 <i class="am-icon-user sidebar-nav-link-logo"></i> 用户中心
@@ -178,8 +90,8 @@
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
-                    <a href="/user/score.html" class="<?php echo $config['actionname']=='score'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 资金明细
+                    <a href="/user/money_log.html" class="<?php echo $config['actionname']=='money_log'?'sub-active':''; ?>">
+                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 消费记录
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
@@ -212,7 +124,7 @@
             </a>
         </li>
         <li class="sidebar-nav-link">
-                    <a href="/business/monitor" <?php if(in_array(($config['actionname']), explode(',',"monitor,search,chart"))): ?> class="sub-active" <?php endif; ?>>
+                    <a href="/business/monitor" <?php if(in_array(($config['actionname']), explode(',',"monitor,search,monitor_echarts"))): ?> class="sub-active" <?php endif; ?>>
                         <i class="am-icon-search sidebar-nav-link-logo"></i> 排名监控
                     </a>
                 </li>
@@ -254,7 +166,7 @@
           <div class="widget-head am-fr">
             <div class="widget-title am-fl">商品监控中心</div>
             <div class="widget-function am-fr">
-              <button type="button" class="am-btn am-btn-success" data-am-modal="{target:'#addjk',closeViaDimmer:0,width:600,height:260}"><span class="am-icon-plus"></span> 添加监控</button>
+              <button type="button" class="am-btn am-btn-success" <?php if($is_add): ?> data-am-modal="{target:'#addjk',closeViaDimmer:0,width:600,height:260}" <?php else: ?> data-am-modal="{target:'#addnotice',closeViaDimmer:0,width:400,height:260}" <?php endif; ?> ><span class="am-icon-plus"></span> 添加监控</button>
             </div>
           </div>
           <table id="table" class="am-table-hover" width="100%"></table>
@@ -290,6 +202,23 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="addnotice">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">您是<font color="red"><?php echo $level_name; ?></font>
+      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+    </div>
+    <div class="am-modal-bd">
+      您最多能添加<?php echo $limit_contender; ?>个竞品,现在已经添加了<?php echo $exists_contender; ?>个竞品。
+    </div>
+    <?php if($level==2): ?>
+    <div class="am-modal-bd">
+      如果想要拥有跟多权限，请充值成为<a href="#">VIP会员</a>。
+    </div>
+    <?php endif; if(isset($is_expire_time)): ?>
+      您的<?php echo $level_name; ?>已经过期,请去<a href="#">续费会员</a>。
+    <?php endif; ?>
   </div>
 </div>
 
