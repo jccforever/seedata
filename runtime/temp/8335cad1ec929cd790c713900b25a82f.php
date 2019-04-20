@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\index.html";i:1555665859;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\index.html";i:1555744727;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -210,31 +210,22 @@
                         <table class="am-table am-table-striped am-table-bordered am-table-hover am-table-centered">
                             <thead>
                                 <tr>
-                                    <th>功能</th><th>游客</th><th>普通会员</th><th>高级会员</th><th>VIP会员</th>
+                                    <th>功能</th>
+                                    <?php foreach($level_name_array as $vo): ?><th><?php echo $vo; ?></th><?php endforeach; ?>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>查排名</td>
-                                    <td>10页</td>
-                                    <td>15页</td>
-                                    <td>20页</td>
-                                    <td>100页</td>
+                                    <?php foreach($page_array as $vo): ?><td><?php echo $vo; ?>页</td><?php endforeach; ?>
                                 </tr>
                                 <tr>
                                     <td>排名监控</td>
-                                    <td>x</td>
-                                    <td>5个关键词</td>
-                                    <td>15个关键词</td>
-                                    <td>100个关键词</td>
+                                    <?php foreach($monitor_crontabs as $vo): ?><td><?php if($vo==0): ?>x<?php else: ?><?php echo $vo; ?>个关键词<?php endif; ?></td><?php endforeach; ?>
                                 </tr>
                                 <tr>
                                     <td>竞品监控</td>
-                                    <td>x</td>
-                                    <td>1个商品</td>
-                                    <td>5个商品</td>
-                                    <td>100个商品</td>
-                                     
+                                    <?php foreach($contend_crontabs as $vo): ?><td><?php if($vo==0): ?>x<?php else: ?><?php echo $vo; ?>个商品<?php endif; ?></td><?php endforeach; ?>
                                 </tr>
                                 <tr>
                                     <td>通知方式</td>
@@ -284,30 +275,14 @@
                  <table class="am-table am-table-striped am-table-hover am-table-centered">
                           <thead> <tr><th>周期</th><th>高级会员</th><th>VIP会员</th><th>购买VIP</th></tr></thead>
                           <tbody>
+                              <?php foreach($vip_price_info as $val): ?>
                               <tr>
-                               <td>一月</td>
-                               <td>推广6人</td>
-                               <td>￥30</td>
-                               <td><button type="button" class="am-btn am-btn-success am-btn-xs" data-am-modal="{target:'#payimg',closeViaDimmer:1,width:300,height:300}" onclick="bvip('1')"><i class="am-icon-weixin"></i> 支付</button></td>
+                               <td><?php echo $val['duration_time']; ?></td>
+                               <td>推广<?php echo $val['push_num']; ?>人</td>
+                               <td>￥<?php echo $val['price']; ?></td>
+                               <td><button type="button" class="am-btn am-btn-success am-btn-xs" data-am-modal="{target:'#payimg',closeViaDimmer:1,width:300,height:300}" onclick="bvip(<?php echo $val['id']; ?>)"><i class="am-icon-cny"></i> 支付宝购买</button></td>
                               </tr>
-                              <tr>
-                               <td>三月</td>
-                               <td>推广18人</td>
-                               <td>￥80</td>
-                               <td> <button type="button" class="am-btn am-btn-success am-btn-xs" data-am-modal="{target:'#payimg',closeViaDimmer:1,width:300,height:300}" onclick="bvip('2')"><i class="am-icon-cny"></i> 支付宝购买</button></td>
-                              </tr>
-                              <tr>
-                               <td>半年</td>
-                               <td>推广36人</td>
-                               <td>￥160</td>
-                               <td> <button type="button" class="am-btn am-btn-success am-btn-xs" data-am-modal="{target:'#payimg',closeViaDimmer:1,width:300,height:300}" onclick="bvip('3')"><i class="am-icon-cny"></i> 支付宝购买</button> </td>			 
-                              </tr>
-                              <tr>
-                               <td>一年</td>
-                               <td>推广73人</td>
-                               <td>￥300</td>
-                               <td> <button type="button" class="am-btn am-btn-success am-btn-xs" data-am-modal="{target:'#payimg',closeViaDimmer:1,width:300,height:300}" onclick="bvip('4')"><i class="am-icon-cny"></i> 支付宝购买</button> </td>
-                              </tr>
+                              <?php endforeach; ?>
                               <tr>
                                <td colspan="4">注：高级会员只能通过推广获得，推荐1人奖励5天高级会员，可累加</td>
                               </tr>

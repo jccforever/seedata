@@ -88,12 +88,29 @@ class User extends Frontend
                 $expire_time = "已过期";
             }
         }
+        $levelInfo = Db::name('user_level')->select();
+        $level_name_array = [];
+        $page_array = [];
+        $monitor_crontabs = [];
+        $contend_crontabs = [];
+        foreach($levelInfo as $key=>$val){
+            $level_name_array[$key] = $val['level_name'];
+            $page_array[$key] = $val['page'];
+            $monitor_crontabs[$key] = $val['monitor_crontab'];
+            $contend_crontabs[$key] = $val['contend_crontab'];
+        }
+        $vip_price_info = Db::name('vip_price')->select();
         $this->assign('userName',$user);
         $this->assign('keywordsNum',$keywords_num);
         $this->assign('competitorNum',$competitor_num);
         $this->assign('level_name',$level_name);
         $this->assign('expire_time',$expire_time);
         $this->assign('url',$url);
+        $this->assign('level_name_array',$level_name_array);
+        $this->assign('page_array',$page_array);
+        $this->assign('monitor_crontabs',$monitor_crontabs);
+        $this->assign('contend_crontabs',$contend_crontabs);
+        $this->assign('vip_price_info',$vip_price_info);
         return $this->view->fetch();
     }
 
@@ -431,16 +448,16 @@ class User extends Frontend
             $user_info = Db::name('user')->where('id',$user_id)->find();
             $user_level = $user_info['level'];//用户等级
             $expire_time = $user_info['expire_time'];//过期时间
-            if($user_level==3){
-                $expire_time = 0;
+            if($user_level==2 || $user_level==3){
+                $expire_time = $duration_time;
             }
-            if($user_level==4 || $user_level==2){
+            if($user_level==4 ){
                 if($expire_time-time()>10){
                     $expire_time = $expire_time-time();
                     $expire_time = $expire_time+$duration_time;
                 }else{
                     $expire_time = 0;
-                    $expire_time = $duration_time;
+                    $expire_time = $expire_time+$duration_time;
                 }
             }
             $update = [

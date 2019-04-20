@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:66:"E:\seedata\public/../application/index\view\business\jingdong.html";i:1555643274;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741098;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:66:"E:\seedata\public/../application/index\view\business\jingdong.html";i:1555643274;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -127,11 +127,6 @@
             <a href="/business/contend"  <?php if(in_array(($config['actionname']), explode(',',"contend,contend_detail"))): ?> class="sub-active" <?php endif; ?>>
                 <i class="am-icon-line-chart sidebar-nav-link-logo"></i> 竞品监控
             </a>
-        </li>
-        <li class="sidebar-nav-link">
-              <a href="/user/union.html" class="<?php echo $config['actionname']=='union'?'sub-active':''; ?>">
-                 <i class="am-icon-group sidebar-nav-link-logo"></i> 推广赚钱
-              </a>
         </li>
         <li class="sidebar-nav-link">
             <a href="/user/logout.html" >
