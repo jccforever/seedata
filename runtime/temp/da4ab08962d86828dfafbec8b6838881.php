@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:63:"E:\seedata\public/../application/index\view\user\changepwd.html";i:1548329149;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:65:"E:\seedata\public/../application/index\view\user\invite_list.html";i:1555740921;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -135,53 +135,22 @@
         </li>
     </ul>
 </div>
+<!--邀请列表表单-->
 <div class="tpl-content-wrapper">
-    <div class="row-content am-cf">
-        <div class="row  am-cf">
-            <div class="am-u-sm-12 am-u-md-12">
-                <div class="widget am-cf">
-                    <div class="widget-head am-fr">
-                        <div class="widget-title am-fl">
-                            修改密码
-                        </div>
-                        <div class="widget-body am-fr">
-                            <form id="changepwd-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
-                                <?php echo token(); ?>
-                                <div class="form-group">
-                                    <label for="oldpassword" class="control-label col-xs-12 col-sm-2"><?php echo __('Old password'); ?>:</label>
-                                    <div class="col-xs-12 col-sm-4">
-                                        <input type="password" class="form-control" id="oldpassword" name="oldpassword" value="" data-rule="required" placeholder="<?php echo __('Old password'); ?>">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="newpassword" class="control-label col-xs-12 col-sm-2"><?php echo __('New password'); ?>:</label>
-                                    <div class="col-xs-12 col-sm-4">
-                                        <input type="password" class="form-control" id="newpassword" name="newpassword" value="" data-rule="required" placeholder="<?php echo __('New password'); ?>" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="renewpassword" class="control-label col-xs-12 col-sm-2"><?php echo __('Renew password'); ?>:</label>
-                                    <div class="col-xs-12 col-sm-4">
-                                        <input type="password" class="form-control" id="renewpassword" name="renewpassword" value="" data-rule="required" placeholder="<?php echo __('Renew password'); ?>" />
-                                    </div>
-                                </div>
-
-                                <div class="form-group normal-footer">
-                                    <label class="control-label col-xs-12 col-sm-2"></label>
-                                    <div class="col-xs-12 col-sm-8">
-                                        <button type="submit" class="btn btn-success btn-embossed disabled"><?php echo __('Submit'); ?></button>
-                                        <button type="reset" class="btn btn-default btn-embossed"><?php echo __('Reset'); ?></button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="row-content am-cf">
+		<div class="row am-cf">
+			<div class="am-u-sm-12 am-u-md-12">
+				<div class="widget am-cf">
+					<div class="widget-head am-fr">成功邀请一个好友注册可免费增加5天高级会员，可累加</div>
+					<div class="widget-body am-fr">
+						<table id="table" class="table table-striped table-bordered table-hover table-nowrap" width="100%">
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-
         </main>
         <footer class="am-footer am-footer-default">
             <div class="am-footer-miscs">

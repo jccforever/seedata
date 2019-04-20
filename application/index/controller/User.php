@@ -72,18 +72,28 @@ class User extends Frontend
     {
         $user = $this->auth->username;
         $uid = $this->auth->id;
+        $level = $this->auth->level;
         $keywords_num = Db::name('links_keywords')->where('user_id',$uid)->count('keywords');
         $competitor_num = Db::name('competitor')->where('user_id',$uid)->count('competitor_url');
         $user_level = Db::name('user')->where('id',$uid)->field('level,expire_time')->find();
         $level_name = Db::name('user_level')->where('id',$user_level['level'])->value('level_name');
-        // $time = timediff(time(),$user_level['expire_time']);
-        // $expire_time = $time['day'].'天'.$time['hour'].'时'.$time['min'].'分'.$time['sec'].'秒';
+        $remark = $uid.mt_rand(10,99);
+        $url = $_SERVER['SERVER_NAME'].'/user/register?remark='.$remark;
         $expire_time = date('Y-m-d',$user_level['expire_time']);
+        if($level==2){
+            $expire_time ="永久";
+        }
+        if($level==3 || $level==4){
+            if(strtotime($expire_time)-time()<10){
+                $expire_time = "已过期";
+            }
+        }
         $this->assign('userName',$user);
         $this->assign('keywordsNum',$keywords_num);
         $this->assign('competitorNum',$competitor_num);
         $this->assign('level_name',$level_name);
         $this->assign('expire_time',$expire_time);
+        $this->assign('url',$url);
         return $this->view->fetch();
     }
 
@@ -92,8 +102,16 @@ class User extends Frontend
      */
     public function register()
     {
+        session_start();
         $url = $this->request->request('url');
-        $fid = $this->request->request('fcode');
+        $fid = $this->request->request('remark');
+        if($fid){
+            $fid = substr($fid,0,-2);
+            Session::set('fid',$fid);
+        }
+        if($fid ==null){
+            $fid = Session::get('fid');
+        }
         if ($this->auth->id)
             $this->success(__('You\'ve logged in, do not login again'), $url);
         if ($this->request->isPost()) {
@@ -102,7 +120,7 @@ class User extends Frontend
             $email = $this->request->post('email');
             $mobile = $this->request->post('mobile', '');
             $captcha = $this->request->post('captcha');
-            $friendid = substr($this->request->post('fid'),0,-4);
+            $friendid = $this->request->post('fid');
             $token = $this->request->post('__token__');
             $rule = [
                 'username'  => 'require|length:3,30',
@@ -143,6 +161,24 @@ class User extends Frontend
                     $uc = new \addons\ucenter\library\client\Client();
                     $synchtml = $uc->uc_user_synregister($this->auth->id, $password);
                 }
+                //更新被推广者的信息
+                if($friendid){
+                    $pusher = Db::name('user')->where('id',$friendid)->find();
+                    $level = $pusher['level'];
+                    $expire_time = $pusher['expire_time'];
+                    if($level==2){
+                        $update = update_pusher($level,$expire_time,$friendid,$duration='5day',time());
+                        $sql_update = Db::name('user')->update($update);
+                    }
+                    if($level==3){
+                        $update = update_pusher($level,$expire_time,$friendid,$duration='5day',time());
+                        $sql_update = Db::name('user')->update($update);
+                    }
+                    if($level==4){
+                        $update = update_pusher($level,$expire_time,$friendid,$duration='2day',time());
+                        $sql_update = Db::name('user')->update($update);
+                    }
+                }
                 $this->success(__('Sign up successful') . $synchtml, $url ? $url : url('user/index'));
             } else {
                 $this->error($this->auth->getError(), null, ['token' => $this->request->token()]);
@@ -167,7 +203,7 @@ class User extends Frontend
     {
         $url = $this->request->request('url');
         if ($this->auth->id)
-            $this->success(__('You\'ve logged in, do not login again'), $url);
+            $this->success(__('You\'ve logged in, do not login again'), '/user/index.html');
         if ($this->request->isPost()) {
             $account = $this->request->post('account');
             $password = $this->request->post('password');
@@ -331,24 +367,6 @@ class User extends Frontend
         return $this->view->fetch();
     }
     /**
-     * 推广链接
-     */
-    public function union()
-    {
-        $tcode = $this->auth->id.mt_rand(1000, 9999);
-        $url = 'http://'.$_SERVER['SERVER_NAME'].'/user/register.html?fcode='.$tcode;
-        // 查询状态为1的用户数据 并且每页显示10条数据
-        $list = model('user')->where('friendid',$this->auth->id)->paginate(10);
-        // 获取分页显示
-        $page = $list->render();
-        // 模板变量赋值
-        $this->assign('list', $list);
-        $this->assign('page', $page);
-
-        $this->assign('url', $url);
-        return $this->view->fetch();
-    }
-    /**
      * 会员充值
      */
     public function pay(Request $request)
@@ -442,7 +460,35 @@ class User extends Frontend
             $sql_insert = Db::name('user_money_log')->insert($insert);
             echo "success";
         }else{
-            echo '不是post';
+            echo '非法请求';
         }
+    }
+    /**
+     * 邀请列表
+     */
+    public function invite_list(Request $request)
+    {
+        if($request->isAjax()){
+            $id = $this->auth->id;
+            $father_level = $this->auth->level;
+            list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+            $total = Db::name('user')
+                    ->where('friendid',$id)
+                    ->order($sort, $order)
+                    ->count();
+            $list = Db::name('user')
+                ->where('friendid',$id)
+                ->order($sort, $order)
+                ->limit($offset, $limit)
+                ->select();
+            $list = collection($list)->toArray();
+            $result = array("total" => $total, "rows" => $list);
+            foreach($result['rows'] as $key=>$val){
+                $result['rows'][$key]['memo'] = '推广用户获得5天高级会员'; 
+                $result['rows'][$key]['father_level'] = $father_level; 
+            }
+            return json($result);
+        }
+        return $this->view->fetch();
     }
 }

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\index.html";i:1555471693;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555400738;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\index.html";i:1555665859;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -75,7 +75,7 @@
         <li class="sidebar-nav-link">
             <a href="javascript:;" class="sidebar-nav-sub-title">
                 <i class="am-icon-user sidebar-nav-link-logo"></i> 用户中心
-                <?php if(in_array((\think\Request::instance()->action()), explode(',',"adds,score,recharge,changepwd"))): ?>
+                <?php if(in_array((\think\Request::instance()->action()), explode(',',"invite_list,money_log,changepwd"))): ?>
                 <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico sidebar-nav-sub-ico-rotate"></span>
             </a>
             <ul class="sidebar-nav sidebar-nav-sub" style="display: block;" >
@@ -85,8 +85,8 @@
             <ul class="sidebar-nav sidebar-nav-sub">
             <?php endif; ?>
                 <li class="sidebar-nav-link">
-                    <a href="/express/adds.html" class="<?php echo $config['actionname']=='adds'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 发货地址
+                    <a href="/user/invite_list.html" class="<?php echo $config['actionname']=='invite_list'?'sub-active':''; ?>">
+                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 邀请列表
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
@@ -97,11 +97,6 @@
                 <li class="sidebar-nav-link">
                     <a href="/user/changepwd.html" class="<?php echo $config['actionname']=='changepwd'?'sub-active':''; ?>">
                         <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 修改密码
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/recharge/recharge.html" class="<?php echo $config['actionname']=='recharge'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 余额充值
                     </a>
                 </li>
             </ul>
@@ -132,11 +127,6 @@
             <a href="/business/contend"  <?php if(in_array(($config['actionname']), explode(',',"contend,contend_detail"))): ?> class="sub-active" <?php endif; ?>>
                 <i class="am-icon-line-chart sidebar-nav-link-logo"></i> 竞品监控
             </a>
-        </li>
-        <li class="sidebar-nav-link">
-              <a href="/user/union.html" class="<?php echo $config['actionname']=='union'?'sub-active':''; ?>">
-                 <i class="am-icon-group sidebar-nav-link-logo"></i> 推广赚钱
-              </a>
         </li>
         <li class="sidebar-nav-link">
             <a href="/user/logout.html" >
@@ -195,7 +185,7 @@
                     </div>
                     <div class="widget-body am-fr">
                         <div class="am-fl am-cf">
-                            <a href="javascript:;" class="am-btn am-btn-default am-btn-xs" id="gdays">到期时间<font color="red"><?php if($level_name !='普通会员'): ?><?php echo $expire_time; else: ?> 永久<?php endif; ?></font></a>
+                            <a href="javascript:;" class="am-btn am-btn-default am-btn-xs" id="gdays">到期时间:<font color="red"><?php echo $expire_time; ?></font></a>
                             <a href="javascript:void(0)" class="am-btn am-btn-secondary am-btn-xs" data-am-modal="{target:'#buyvip',closeViaDimmer:0,width:600,height:330}"> <i class="am-icon-cny"></i> 购买等级 </a>
                         </div>
                     </div>
@@ -209,8 +199,8 @@
                     <div class="widget-head am-fr">
                         <div class="widget-title am-fl">
                           <div class="am-panel am-panel-default am-margin-bottom-xs">
-                            <div class="am-panel-bd" id="share">给你推荐一个免费淘宝京东排名查询网站，还有关键词和竞争对手监控功能，都是免费的！<span id="turls">www.kanshuju.com/cha/reg.shtml?tcode=26594384</span></div>
-                            <button type="button" class="am-btn am-btn-danger am-btn-xs divcopy" data-clipboard-action="copy" data-clipboard-target="#share"><i class="am-icon-copy"></i> 点击复制</button>
+                            <div class="am-panel-bd" id="share">给你推荐一个免费淘宝京东排名查询网站，还有关键词和竞争对手监控功能，都是免费的！<span id="turls"><?php echo $url; ?></span></div>
+                            <button type="button" class="am-btn am-btn-danger am-btn-xs divcopy" data-clipboard-action="copy" data-clipboard-target="#turls"><i class="am-icon-copy"></i> 点击复制</button>
                          </div>  
 
                         </div>

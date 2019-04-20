@@ -49,7 +49,7 @@
                     </div>
                     <div class="widget-body am-fr">
                         <div class="am-fl am-cf">
-                            <a href="javascript:;" class="am-btn am-btn-default am-btn-xs" id="gdays">到期时间<font color="red">{if $level_name !='普通会员'}{$expire_time}{else/} 永久{/if}</font></a>
+                            <a href="javascript:;" class="am-btn am-btn-default am-btn-xs" id="gdays">到期时间:<font color="red">{$expire_time}</font></a>
                             <a href="javascript:void(0)" class="am-btn am-btn-secondary am-btn-xs" data-am-modal="{target:'#buyvip',closeViaDimmer:0,width:600,height:330}"> <i class="am-icon-cny"></i> 购买等级 </a>
                         </div>
                     </div>
@@ -63,8 +63,8 @@
                     <div class="widget-head am-fr">
                         <div class="widget-title am-fl">
                           <div class="am-panel am-panel-default am-margin-bottom-xs">
-                            <div class="am-panel-bd" id="share">给你推荐一个免费淘宝京东排名查询网站，还有关键词和竞争对手监控功能，都是免费的！<span id="turls">www.kanshuju.com/cha/reg.shtml?tcode=26594384</span></div>
-                            <button type="button" class="am-btn am-btn-danger am-btn-xs divcopy" data-clipboard-action="copy" data-clipboard-target="#share"><i class="am-icon-copy"></i> 点击复制</button>
+                            <div class="am-panel-bd" id="share">给你推荐一个免费淘宝京东排名查询网站，还有关键词和竞争对手监控功能，都是免费的！<span id="turls">{$url}</span></div>
+                            <button type="button" class="am-btn am-btn-danger am-btn-xs divcopy" data-clipboard-action="copy" data-clipboard-target="#turls"><i class="am-icon-copy"></i> 点击复制</button>
                          </div>  
 
                         </div>

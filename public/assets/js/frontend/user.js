@@ -139,6 +139,46 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table'], function ($, undefi
                     }
                 })
             }
+        },
+        invite_list:function(){
+             // 初始化表格参数配置
+             Table.api.init({
+                extend: {
+                    index_url: 'user/invite_list',
+                    table: 'user',
+                }
+            });
+		   var table = $("#table");
+		   // 初始化表格
+            table.bootstrapTable({
+                url: $.fn.bootstrapTable.defaults.extend.index_url,
+                pk: 'id',
+                sortName: 'id',
+                showToggle: false,
+				showColumns: false,
+                showExport: false,
+                commonSearch: false,
+                search:false,
+                columns: [
+                    [
+                        {field:'id','title':'#'},
+                        {field: 'username', title: '用户名',formatter:function(value,row,index){
+                            var name = row.username;
+                            var str = name.substr(0,3);
+                            var res = str+'****';
+                            return res;  
+                        }},
+                        {field: 'memo', title: __('Memo'),formatter:function(value,row,index){
+                            if(row.father_level==4){
+                                return "推广用户获得2天VIP会员";
+                            }else{
+                                return "推广用户获得5天高级会员";
+                            }
+                        }},
+                        {field: 'createtime', title:'注册时间', operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime}   
+                    ]
+                ]
+            });
         }
     };
     return Controller;

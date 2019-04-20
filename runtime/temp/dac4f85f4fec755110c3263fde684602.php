@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:63:"E:\seedata\public/../application/index\view\user\money_log.html";i:1555401264;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555400738;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:63:"E:\seedata\public/../application/index\view\user\money_log.html";i:1555401264;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -96,7 +96,7 @@
         <li class="sidebar-nav-link">
             <a href="javascript:;" class="sidebar-nav-sub-title">
                 <i class="am-icon-user sidebar-nav-link-logo"></i> 用户中心
-                <?php if(in_array((\think\Request::instance()->action()), explode(',',"adds,score,recharge,changepwd"))): ?>
+                <?php if(in_array((\think\Request::instance()->action()), explode(',',"invite_list,money_log,changepwd"))): ?>
                 <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico sidebar-nav-sub-ico-rotate"></span>
             </a>
             <ul class="sidebar-nav sidebar-nav-sub" style="display: block;" >
@@ -106,8 +106,8 @@
             <ul class="sidebar-nav sidebar-nav-sub">
             <?php endif; ?>
                 <li class="sidebar-nav-link">
-                    <a href="/express/adds.html" class="<?php echo $config['actionname']=='adds'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 发货地址
+                    <a href="/user/invite_list.html" class="<?php echo $config['actionname']=='invite_list'?'sub-active':''; ?>">
+                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 邀请列表
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
@@ -118,11 +118,6 @@
                 <li class="sidebar-nav-link">
                     <a href="/user/changepwd.html" class="<?php echo $config['actionname']=='changepwd'?'sub-active':''; ?>">
                         <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 修改密码
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/recharge/recharge.html" class="<?php echo $config['actionname']=='recharge'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 余额充值
                     </a>
                 </li>
             </ul>
@@ -153,11 +148,6 @@
             <a href="/business/contend"  <?php if(in_array(($config['actionname']), explode(',',"contend,contend_detail"))): ?> class="sub-active" <?php endif; ?>>
                 <i class="am-icon-line-chart sidebar-nav-link-logo"></i> 竞品监控
             </a>
-        </li>
-        <li class="sidebar-nav-link">
-              <a href="/user/union.html" class="<?php echo $config['actionname']=='union'?'sub-active':''; ?>">
-                 <i class="am-icon-group sidebar-nav-link-logo"></i> 推广赚钱
-              </a>
         </li>
         <li class="sidebar-nav-link">
             <a href="/user/logout.html" >

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:63:"E:\seedata\public/../application/index\view\user\changepwd.html";i:1548329149;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:4:{s:62:"E:\seedata\public/../application/index\view\user\register.html";i:1548231749;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -62,126 +62,62 @@
             </div>
         </header>
         <main class="content">
-            <!-- 侧边导航栏 -->
-<div class="left-sidebar">
-    <!-- 菜单 -->
-    <ul class="sidebar-nav">
-        <li class="sidebar-nav-heading"> </li>
-        <li class="sidebar-nav-link">
-            <a href="/user/index.html" class="<?php echo $config['actionname']=='index'?'sub-active':''; ?>">
-                <i class="am-icon-home sidebar-nav-link-logo"> </i> 用户首页
-            </a>
-        </li>
-        <li class="sidebar-nav-link">
-            <a href="javascript:;" class="sidebar-nav-sub-title">
-                <i class="am-icon-user sidebar-nav-link-logo"></i> 用户中心
-                <?php if(in_array((\think\Request::instance()->action()), explode(',',"invite_list,money_log,changepwd"))): ?>
-                <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico sidebar-nav-sub-ico-rotate"></span>
-            </a>
-            <ul class="sidebar-nav sidebar-nav-sub" style="display: block;" >
-            <?php else: ?>
-               <span class="am-icon-chevron-right am-fr am-margin-right-sm sidebar-nav-sub-ico"></span>
-            </a>
-            <ul class="sidebar-nav sidebar-nav-sub">
-            <?php endif; ?>
-                <li class="sidebar-nav-link">
-                    <a href="/user/invite_list.html" class="<?php echo $config['actionname']=='invite_list'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 邀请列表
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/user/money_log.html" class="<?php echo $config['actionname']=='money_log'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 消费记录
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="/user/changepwd.html" class="<?php echo $config['actionname']=='changepwd'?'sub-active':''; ?>">
-                        <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 修改密码
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="sidebar-nav-link">
-            <a href="/Business/taobao" class="<?php echo $config['actionname']=='taobao'?'sub-active':''; ?>">
-                <i class="sidebar-nav-link-logo"> <img src="/assets/img/tb.png" width="20" height="20"></i>
-                淘宝排名查询
-            </a>
-        </li>
-        <li class="sidebar-nav-link">
-            <a href="/Business/jingdong" class="<?php echo $config['actionname']=='jingdong'?'sub-active':''; ?>">
-                <i class="sidebar-nav-link-logo"> <img src="/assets/img/jd.png" width="20" height="20"></i>
-                京东排名查询
-            </a>
-        </li>
-        <li class="sidebar-nav-link">
-            <a href="#">
-               <i class="am-icon-exchange sidebar-nav-link-logo"></i> 生意参谋工具
-            </a>
-        </li>
-        <li class="sidebar-nav-link">
-                    <a href="/business/monitor" <?php if(in_array(($config['actionname']), explode(',',"monitor,search,monitor_echarts"))): ?> class="sub-active" <?php endif; ?>>
-                        <i class="am-icon-search sidebar-nav-link-logo"></i> 排名监控
-                    </a>
-                </li>
-        <li class="sidebar-nav-link">
-            <a href="/business/contend"  <?php if(in_array(($config['actionname']), explode(',',"contend,contend_detail"))): ?> class="sub-active" <?php endif; ?>>
-                <i class="am-icon-line-chart sidebar-nav-link-logo"></i> 竞品监控
-            </a>
-        </li>
-        <li class="sidebar-nav-link">
-            <a href="/user/logout.html" >
-                <i class="am-icon-sign-out sidebar-nav-link-logo"></i> 退出登录
-            </a>
-        </li>
-    </ul>
-</div>
-<div class="tpl-content-wrapper">
-    <div class="row-content am-cf">
-        <div class="row  am-cf">
-            <div class="am-u-sm-12 am-u-md-12">
-                <div class="widget am-cf">
-                    <div class="widget-head am-fr">
-                        <div class="widget-title am-fl">
-                            修改密码
-                        </div>
-                        <div class="widget-body am-fr">
-                            <form id="changepwd-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
-                                <?php echo token(); ?>
-                                <div class="form-group">
-                                    <label for="oldpassword" class="control-label col-xs-12 col-sm-2"><?php echo __('Old password'); ?>:</label>
-                                    <div class="col-xs-12 col-sm-4">
-                                        <input type="password" class="form-control" id="oldpassword" name="oldpassword" value="" data-rule="required" placeholder="<?php echo __('Old password'); ?>">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="newpassword" class="control-label col-xs-12 col-sm-2"><?php echo __('New password'); ?>:</label>
-                                    <div class="col-xs-12 col-sm-4">
-                                        <input type="password" class="form-control" id="newpassword" name="newpassword" value="" data-rule="required" placeholder="<?php echo __('New password'); ?>" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="renewpassword" class="control-label col-xs-12 col-sm-2"><?php echo __('Renew password'); ?>:</label>
-                                    <div class="col-xs-12 col-sm-4">
-                                        <input type="password" class="form-control" id="renewpassword" name="renewpassword" value="" data-rule="required" placeholder="<?php echo __('Renew password'); ?>" />
-                                    </div>
-                                </div>
-
-                                <div class="form-group normal-footer">
-                                    <label class="control-label col-xs-12 col-sm-2"></label>
-                                    <div class="col-xs-12 col-sm-8">
-                                        <button type="submit" class="btn btn-success btn-embossed disabled"><?php echo __('Submit'); ?></button>
-                                        <button type="reset" class="btn btn-default btn-embossed"><?php echo __('Reset'); ?></button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+            <div id="content-container" class="container">
+    <div class="user-section login-section">
+        <div class="logon-tab clearfix"> <a href="<?php echo url('user/login'); ?>"><?php echo __('Sign in'); ?></a> <a class="active"><?php echo __('Sign up'); ?></a> </div>
+        <div class="login-main"> 
+            <form name="form1" id="register-form" class="form-vertical" method="POST" action="">
+                <input type="hidden" name="invite_user_id" value="0" />
+                <input type="hidden" name="url" value="<?php echo $url; ?>" />
+                <?php echo token(); ?>
+                <div class="form-group">
+                    <label class="control-label required"><?php echo __('Email'); ?><span class="text-success"></span></label>
+                    <div class="controls">
+                        <input type="text" name="email" id="email" data-rule="required;email" class="form-control input-lg" placeholder="<?php echo __('Email'); ?>">
+                        <p class="help-block"></p>
                     </div>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label class="control-label"><?php echo __('Username'); ?></label>
+                    <div class="controls">
+                        <input type="text" id="username" name="username" data-rule="required;username" class="form-control input-lg" placeholder="<?php echo __('Username must be 3 to 30 characters'); ?>">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label"><?php echo __('Password'); ?></label>
+                    <div class="controls">
+                        <input type="password" id="password" name="password" data-rule="required;password" class="form-control input-lg" placeholder="<?php echo __('Password must be 6 to 30 characters'); ?>">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label"><?php echo __('Mobile'); ?></label>
+                    <div class="controls">
+                        <input type="text" id="mobile" name="mobile" data-rule="required;mobile" class="form-control input-lg" placeholder="<?php echo __('Mobile'); ?>">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label"><?php echo __('Captcha'); ?></label>
+                    <div class="controls">
+                        <div class="input-group input-group-lg">
+                            <input type="text" name="captcha" class="form-control" placeholder="<?php echo __('Captcha'); ?>" data-rule="required;length(4)" style="border-radius: 0;" />
+                            <span class="input-group-addon" style="padding:0;border:none;">
+                                <img src="<?php echo captcha_src(); ?>" width="140" height="42" onclick="this.src = '<?php echo captcha_src(); ?>?r=' + Math.random();"/>
+                            </span>
+                        </div>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <input type="hidden" name="fid" value="<?php echo $fid; ?>">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block"><?php echo __('Sign up'); ?></button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
         </main>
         <footer class="am-footer am-footer-default">
             <div class="am-footer-miscs">
