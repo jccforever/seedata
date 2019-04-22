@@ -186,14 +186,35 @@ class User extends Frontend
                     if($level==2){
                         $update = update_pusher($level,$expire_time,$friendid,$duration='5day',time());
                         $sql_update = Db::name('user')->update($update);
+                        $insert = [
+                            'parent_id'=>$friendid,
+                            'son_name'=>$username,
+                            'memo'=>'推广用户获得5天高级会员',
+                            'add_time'=>date('Y-m-d H:i:s',time())
+                        ];
+                        $sql_insert = Db::name('invite_list')->insert($insert);
                     }
                     if($level==3){
                         $update = update_pusher($level,$expire_time,$friendid,$duration='5day',time());
                         $sql_update = Db::name('user')->update($update);
+                        $insert = [
+                            'parent_id'=>$friendid,
+                            'son_name'=>$username,
+                            'memo'=>'推广用户获得5天高级会员',
+                            'add_time'=>date('Y-m-d H:i:s',time())
+                        ];
+                        $sql_insert = Db::name('invite_list')->insert($insert);
                     }
                     if($level==4){
                         $update = update_pusher($level,$expire_time,$friendid,$duration='2day',time());
                         $sql_update = Db::name('user')->update($update);
+                        $insert = [
+                            'parent_id'=>$friendid,
+                            'son_name'=>$username,
+                            'memo'=>'推广用户获得2天VIP会员',
+                            'add_time'=>date('Y-m-d H:i:s',time())
+                        ];
+                        $sql_insert = Db::name('invite_list')->insert($insert);
                     }
                 }
                 $this->success(__('Sign up successful') . $synchtml, $url ? $url : url('user/index'));
@@ -369,7 +390,6 @@ class User extends Frontend
                 ->where($where)
                 ->order($sort, $order)
                 ->count();
-
             $list = Db::name('user_money_log')
                 ->where($where)
                 ->order($sort, $order)
@@ -489,21 +509,17 @@ class User extends Frontend
             $id = $this->auth->id;
             $father_level = $this->auth->level;
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
-            $total = Db::name('user')
-                    ->where('friendid',$id)
+            $total = Db::name('invite_list')
+                    ->where('parent_id',$id)
                     ->order($sort, $order)
                     ->count();
-            $list = Db::name('user')
-                ->where('friendid',$id)
-                ->order($sort, $order)
-                ->limit($offset, $limit)
-                ->select();
+            $list = Db::name('invite_list')
+                    ->where('parent_id',$id)
+                    ->order($sort, $order)
+                    ->limit($offset, $limit)
+                    ->select();
             $list = collection($list)->toArray();
             $result = array("total" => $total, "rows" => $list);
-            foreach($result['rows'] as $key=>$val){
-                $result['rows'][$key]['memo'] = '推广用户获得5天高级会员'; 
-                $result['rows'][$key]['father_level'] = $father_level; 
-            }
             return json($result);
         }
         return $this->view->fetch();

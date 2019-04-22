@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\index.html";i:1555744727;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:59:"E:\seedata\public/../application/index\view\user\index.html";i:1555906107;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -250,15 +250,10 @@
                         <div class="widget-title am-fl">通知/帮助</div>
                     </div>
                     <div class="widget-body widget-body-md am-fr">
-                        <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more">28% / 100%</span></div>
-                        <div class="am-progress">
-                            <div class="am-progress-bar" style="width: 15%">15%</div>
-                        </div>
-                        <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more">28% / 100%</span></div>
-                        <div class="am-progress">
-                            <div class="am-progress-bar  am-progress-bar-warning" style="width: 75%"></div>
-                        </div>
-                         
+                        <div class="am-progress-title">用户推广奖励规则</div>
+                            1.普通用户/高级会员每推广一人成功注册获得5天高级会员奖励<br />
+                            2.VIP会员每推广一人成功注册获得2天VIP会员奖励<br />
+                            3.高级会员充值成为VIP会员，若高级会员未过期,充值时会被清空
                     </div>
                 </div>
             </div>

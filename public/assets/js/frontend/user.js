@@ -162,20 +162,14 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table'], function ($, undefi
                 columns: [
                     [
                         {field:'id','title':'#'},
-                        {field: 'username', title: '用户名',formatter:function(value,row,index){
-                            var name = row.username;
+                        {field: 'son_name', title: '用户名',formatter:function(value,row,index){
+                            var name = row.son_name;
                             var str = name.substr(0,3);
                             var res = str+'****';
                             return res;  
                         }},
-                        {field: 'memo', title: __('Memo'),formatter:function(value,row,index){
-                            if(row.father_level==4){
-                                return "推广用户获得2天VIP会员";
-                            }else{
-                                return "推广用户获得5天高级会员";
-                            }
-                        }},
-                        {field: 'createtime', title:'注册时间', operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime}   
+                        {field: 'memo', title: __('Memo')},
+                        {field: 'add_time', title:'注册时间'}   
                     ]
                 ]
             });

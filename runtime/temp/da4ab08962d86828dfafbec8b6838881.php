@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:65:"E:\seedata\public/../application/index\view\user\invite_list.html";i:1555740921;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:65:"E:\seedata\public/../application/index\view\user\invite_list.html";i:1555905683;s:53:"E:\seedata\application\index\view\layout\default.html";i:1552545932;s:50:"E:\seedata\application\index\view\common\meta.html";i:1548127895;s:53:"E:\seedata\application\index\view\common\sidenav.html";i:1555741324;s:52:"E:\seedata\application\index\view\common\script.html";i:1550733086;}*/ ?>
 <!DOCTYPE html>
  <html>
         <head>
@@ -141,7 +141,7 @@
 		<div class="row am-cf">
 			<div class="am-u-sm-12 am-u-md-12">
 				<div class="widget am-cf">
-					<div class="widget-head am-fr">成功邀请一个好友注册可免费增加5天高级会员，可累加</div>
+					<div class="widget-head am-fr">成功邀请一个好友注册可免费增加5天高级会员，可累加(VIP会员成邀请一个好友注册奖励两天VIP会员,可累加)</div>
 					<div class="widget-body am-fr">
 						<table id="table" class="table table-striped table-bordered table-hover table-nowrap" width="100%">
 						</table>
