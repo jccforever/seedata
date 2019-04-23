@@ -201,8 +201,8 @@ class Auth
             $this->_user = User::get($user->id);
 
             //设置Token
-            $this->_token = Random::uuid();
-            Token::set($this->_token, $user->id, $this->keeptime);
+            $this->_token = Random::uuid();//生成token token是随机生成的全球唯一标识
+            Token::set($this->_token, $user->id, $this->keeptime);//把token写入数据库
 
             //注册成功的事件
             Hook::listen("user_register_successed", $this->_user);

@@ -52,6 +52,9 @@ class User extends Frontend
             Cookie::delete('uid');
             Cookie::delete('token');
         });
+        Hook::add('hook_test',function(){
+           Cookie::set('Myself','Test hook');
+        });
     }
 
     /**
@@ -395,10 +398,8 @@ class User extends Frontend
                 ->order($sort, $order)
                 ->limit($offset, $limit)
                 ->select();
-
             $list = collection($list)->toArray();
             $result = array("total" => $total, "rows" => $list);
-
             return json($result);
         }
         return $this->view->fetch();
