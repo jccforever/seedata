@@ -1,0 +1,29 @@
+{include file="common/meta" /}
+{include file="common/script" /}
+<div id="content-container" class="container">
+    <div class="user-section login-section">
+        <div class="logon-tab clearfix"> <a class="active">绑定微信扫码登录</a></div>
+        <div class="login-main"> 
+            <form name="form" id="bind-login-form" class="form-vertical" method="post">
+                {:token()}
+                <input type="hidden" name="openid" value="{$openid}">
+                <div class="form-group">
+                    <label class="control-label" for="account">{:__('Account')}</label>
+                    <div class="controls">
+                        <input class="form-control input-lg" id="account" type="text" name="account" value="" data-rule="required" placeholder="{:__('Email/Mobile/Username')}" autocomplete="off">
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="password">{:__('Password')}</label>
+                    <div class="controls">
+                        <input class="form-control input-lg" id="password" type="password" name="password" data-rule="required;password" placeholder="{:__('Password')}" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" id="bind-login" >{:__('Sign in')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

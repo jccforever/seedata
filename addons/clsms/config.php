@@ -9,7 +9,7 @@ return array (
     'content' => 
     array (
     ),
-    'value' => 'N166',
+    'value' => 'N1663305',
     'rule' => 'required',
     'msg' => '',
     'tip' => '',
@@ -24,7 +24,7 @@ return array (
     'content' => 
     array (
     ),
-    'value' => 'Cj1dvx',
+    'value' => 'Cj1dvxWDTEb957',
     'rule' => 'required',
     'msg' => '',
     'tip' => '',
@@ -69,7 +69,7 @@ return array (
     'content' => 
     array (
     ),
-    'value' => '【看】',
+    'value' => '【看数据】',
     'rule' => 'required',
     'msg' => '',
     'tip' => '',

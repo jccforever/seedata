@@ -4,6 +4,18 @@ return array (
   'autoload' => false,
   'hooks' => 
   array (
+    'sms_send' => 
+    array (
+      0 => 'clsms',
+    ),
+    'sms_notice' => 
+    array (
+      0 => 'clsms',
+    ),
+    'sms_check' => 
+    array (
+      0 => 'clsms',
+    ),
     'addons_pay_paid' => 
     array (
       0 => 'pay',
@@ -11,18 +23,6 @@ return array (
     'addons_pay_notify' => 
     array (
       0 => 'pay',
-    ),
-    'sms_send' => 
-    array (
-      0 => 'rlsms',
-    ),
-    'sms_notice' => 
-    array (
-      0 => 'rlsms',
-    ),
-    'sms_check' => 
-    array (
-      0 => 'rlsms',
     ),
   ),
   'route' => 

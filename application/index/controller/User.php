@@ -10,6 +10,7 @@ use think\Session;
 use think\Validate;
 use think\Db;
 use think\Request;
+use addons\wechat\controller\getQrcode;
 /**
  * 会员中心
  */
@@ -17,7 +18,7 @@ class User extends Frontend
 {
 
     protected $layout = 'default';
-    protected $noNeedLogin = ['login', 'register', 'third','async_callback'];
+    protected $noNeedLogin = ['login', 'register', 'third','async_callback','get_qrcode','is_login','bind_login','check_bind_login','bind_notice'];
     protected $noNeedRight = ['*'];
 
     public function _initialize()
@@ -523,6 +524,92 @@ class User extends Frontend
             $result = array("total" => $total, "rows" => $list);
             return json($result);
         }
+        return $this->view->fetch();
+    }
+    /**
+     * 获取微信场景二维码
+     */
+    public function get_qrcode()
+    {
+        Session::start();
+        $session_id = session_id();
+        $href = input('post.timestamp');
+        $params = "s=".$session_id.'h='.$href;
+        $obj = new getQrcode;
+        $qrcode_img = $obj->get_qrcode($params);
+        return ['code'=>1,'msg'=>'ok','data'=>$qrcode_img];
+    }
+    //轮询登录
+    public function is_login()
+    {
+        Session::start();
+        $web_session_id = session_id();
+        $uuid = input('post.timestamp');//唯一标识
+        $is_exists_user = Db::name('user')->where(['session_id'=>$web_session_id,'uuid'=>$uuid])->find();
+        if($is_exists_user){
+            $uid = $is_exists_user['id'];//用户id
+            $this->auth->direct($uid);
+            return ['code'=>1,'msg'=>'ok','url'=>'/user/index'];
+        }else{
+            return ['code'=>0,'msg'=>'等待用户扫码,超过一分钟未扫码停止轮询'];
+        }
+    }
+    //测试
+    public function tts()
+    {
+        // $str = "s=6977scndtpl63lis8bnuvu2fpk,h=1556334021";
+        // $arr = explode(',',$str);
+        // $session_id = trim(str_replace('s=','',$arr[0]));
+        // $timestamp = trim(str_replace('h=','',$arr[1]));
+        // dump($session_id);
+        // $sql = Db::name('user')->where('openid','sdwerds87848')->find();
+        // dump($sql);
+        $openid = '123456';
+        $return = "你还没有绑定看数据网站的微信扫码登陆功能，<a href='http://www.63996.com/user/login.html?openid=".$openid."'>请点击进行绑定操作</a>";
+        dump($return);
+    }
+    /**
+     * 微信登录绑定
+     */
+    public function bind_login()
+    {
+        $this->view->engine->layout(false);
+        $openid = input('get.openid');
+        $this->assign('openid',$openid);
+        return $this->view->fetch();
+    }
+    /**
+     * 验证微信绑定
+     */
+    public function check_bind_login(Request $request)
+    {
+        if($request->isPost()){
+            $openid = input('get.openid');
+            $form = input('post.');
+            $username = $form['account'];
+            $password = $form['password'];
+            $openid = $form['openid'];
+            $is_exists_user = Db::name('user')->where('username',$username)->find();
+            $return = $this->auth->login($username,$password);
+            if($return){
+                $id = $is_exists_user['id'];
+                $update = [
+                    'openid'=>$openid,
+                    'id'=>$id
+                ];
+                $sql = Db::name('user')->update($update);
+                return ['code'=>1,'msg'=>'微信绑定成功','url'=>"bind_notice"];
+            }else{
+                return ['code'=>0,'msg'=>'用户名或密码错误'];
+            }
+        }
+    }
+    /**
+     * 绑定成功提示
+     */
+    public function bind_notice()
+    {
+        $this->view->engine->layout(false);
         return $this->view->fetch();
     }
 }

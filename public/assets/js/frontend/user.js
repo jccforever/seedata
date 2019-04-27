@@ -47,6 +47,64 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'table'], function ($, undefi
                     }
                 });
             });
+            //微信扫码登录
+            $(document).on('click','#wxlogin',function(){
+                var timestamp = new Date().getTime() + "";
+                timestamp = timestamp.substring(0, timestamp.length-3);
+                $.ajax({
+                	url:"/user/get_qrcode",
+                  	type:"post",
+                    dataType:"json",
+                    data:{timestamp:timestamp},
+                  	success:function(res){
+                        if(res.code==1){
+                            $('#wximg').attr('src',res.data);
+                            var startTime = new Date().getTime();
+                            var poll_request = setInterval(function(){
+                                if(new Date().getTime()-startTime>60000){
+                                    clearInterval(poll_request);
+                                }else{
+                                    $.ajax({
+                                        url:"/user/is_login",
+                                        data:{timestamp:timestamp},
+                                        dataType:'json',
+                                        type:'post',
+                                        success:function(res){
+                                            if(res.code==1){
+                                                clearInterval(poll_request);
+                                                location.href=res.url;
+                                            }
+                                        }
+                                    })
+                                }
+                            },1000);
+                        }
+                      }
+                })
+            })
+        },
+        //微信扫码登录绑定
+        bind_login:function(){
+            $(document).on('click','#bind-login',function(){
+                var form_data = $('#bind-login-form').serialize();
+                $("#bind-login").prop('disabled',true);
+                $.ajax({
+                    data:form_data,
+                    dataType:'json',
+                    type:'post',
+                    url:'/user/check_bind_login',
+                    success:function(res){
+                        if(res.code==0){
+                            $('#bind-login').prop('disabled',false);
+                            alert(res.msg);
+                            $('#bind-login').html('再次提交....');
+                        }else{
+                            location.href = res.url;
+                        }
+                    }
+                })
+                return false;
+            })
         },
         register: function () {
             //本地验证未通过时提示
